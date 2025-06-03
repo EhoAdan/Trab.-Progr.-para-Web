@@ -1,0 +1,28 @@
+{
+  "name": "trab.-progr.-para-web",
+  "version": "1.0.0",
+  "description": "Here lies our coursework for UFSC. Third period. \"Programação para Web\" (Programming for the Web)",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/EhoAdan/Trab.-Progr.-para-Web.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/EhoAdan/Trab.-Progr.-para-Web/issues"
+  },
+  "homepage": "https://github.com/EhoAdan/Trab.-Progr.-para-Web#readme",
+  "dependencies": {
+    "express": "^5.1.0",
+    "pg": "^8.16.0"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.10"
+  }
+}
