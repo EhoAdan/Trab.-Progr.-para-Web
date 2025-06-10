@@ -1,48 +1,91 @@
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sistema Escolar</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Sistema Escolar</title>
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-    <header>Bem vindo a escola!</header>
+  <button id="btn-logout" onclick="logout()">Sair</button>
 
-    <section id="area-login">
+  <section id="login-section">
     <h2>Login:</h2>
-    <h2>Senha:</h2>
-    <h3>Esqueci a senha</h3>
-    <h1>Criar usuário</h1>
-    </section>
+    <input type="text" id="login" placeholder="Digite seu login" />
 
-    <section id="area-aluno">
+    <h2>Senha:</h2>
+    <div class="senha-container">
+      <input type="password" id="senha" placeholder="Digite sua senha" />
+      <button type="button" id="btn-ver-senha"></button>
+    </div>
+
+    <button type="submit" onclick="fazerLogin()">Entrar</button>
+
+    <div class="login-actions">
+      <p onclick="mostrarRedefinirSenha()">Esqueci a senha</p>
+      <p onclick="mostrarCriarUsuario()">Criar usuário</p>
+    </div>
+  </section>
+
+  <section id="area-aluno">
+    <h1>Área do Aluno</h1>
     <h1>Boletim</h1>
     <h1>Frequência escolar</h1>
     <h1>Material didático</h1>
     <h1>Turma virtual</h1>
     <h1>Suporte</h1>
-    </section>
+  </section>
 
-    <section id="area-professor">
+  <section id="area-professor">
+    <h1>Área do Professor</h1>
     <h1>Série</h1>
     <h1>Frequência</h1>
     <h1>Boletim</h1>
     <h1>Turma virtual</h1>
     <h1>Material didático</h1>
     <h1>Suporte</h1>
-    </section>
+  </section>
 
-    <section id="area-outro-funcionario">
+  <section id="area-funcionario">
+    <h1>Área do Funcionário</h1>
     <h1>Suporte</h1>
-    </section>
+  </section>
 
-    <section id="secretariado">
+  <section id="area-secretaria">
+    <h1>Área da Secretaria</h1>
     <h1>Cadastro</h1>    
     <h1>Reclamações</h1>
     <h1>Requisições</h1>
     <h1>Usuários</h1>
     </section>
-    
+
+  <section id="area-suporte">
+    <h1>Área de Suporte</h1>
+  </section>
+
+  <section id="criar-usuario-section">
+    <h2>Criar novo usuário</h2>
+    <input type="text" id="novo-usuario" placeholder="Novo login" />
+    <input type="password" id="nova-senha" placeholder="Nova senha" />
+    <select id="tipo-usuario">
+      <option value="">Selecione o tipo</option>
+      <option value="aluno">Aluno</option>
+      <option value="professor">Professor</option>
+      <option value="funcionario">Funcionário</option>
+      <option value="secretaria">Secretaria</option>
+    </select>
+    <button onclick="criarUsuario()">Criar</button>
+    <button onclick="voltarLogin()">Voltar</button>
+  </section>
+
+  <section id="redefinir-senha-section">
+    <h2>Redefinir senha</h2>
+    <input type="text" id="usuario-redefinir" placeholder="Usuário" />
+    <input type="password" id="nova-senha-redefinir" placeholder="Nova senha" />
+    <button onclick="redefinirSenha()">Redefinir</button>
+    <button onclick="voltarLogin()">Voltar</button>
+  </section>
+
+  <script src="script.js"></script>
 </body>
 </html>
