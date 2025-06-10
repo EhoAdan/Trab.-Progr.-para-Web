@@ -121,3 +121,52 @@ button[type="submit"]:hover {
   content: "\1F441";
   margin-right: 5px;
 }
+
+#material-didatico {
+  margin-top: 20px;
+  background-color: #fff;
+  padding: 15px;
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(0,0,0,0.1);
+}
+
+#selecionar-disciplina {
+  margin-bottom: 15px;
+}
+
+#livros-container {
+  margin-top: 15px;
+}
+
+.livro {
+  padding: 10px;
+  margin-bottom: 10px;
+  background-color: #f1f1f1;
+  border-radius: 5px;
+}
+
+#frequencia-container {
+  display: none;
+  margin-top: 20px;
+}
+
+#alunos-frequencia {
+  margin-top: 10px;
+}
+
+#frequencia-container .botao-salvar {
+  margin-top: 10px;
+}
+
+#professor-menu {
+  display: flex;
+  flex-direction: column; 
+  gap: 10px;              
+  max-width: 200px;       
+}
+
+#professor-menu button {
+  padding: 10px;
+  font-size: 16px;
+  cursor: pointer;
+}
