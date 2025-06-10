@@ -127,3 +127,127 @@ document.addEventListener("DOMContentLoaded", () => {
     btnVerSenha.addEventListener("click", alternarSenha);
   }
 });
+
+const livrosDidaticos = {
+  portugues: [
+    { titulo: "Gramática Completa", link: "#" },
+    { titulo: "Literatura Brasileira", link: "#" }
+  ],
+  matematica: [
+    { titulo: "Álgebra Fundamental", link: "#" },
+    { titulo: "Geometria Essencial", link: "#" }
+  ],
+  historia: [
+    { titulo: "História do Brasil", link: "#" },
+    { titulo: "História Geral", link: "#" }
+  ],
+  geografia: [
+    { titulo: "Geografia Física", link: "#" },
+    { titulo: "Geopolítica Atual", link: "#" }
+  ],
+  ciencias: [
+    { titulo: "Ciências Naturais", link: "#" },
+    { titulo: "Biologia Básica", link: "#" }
+  ],
+  filosofia: [
+    { titulo: "Sócrates", link: "#" },
+    { titulo: "Platão", link: "#" }
+  ],
+  artes: [
+    { titulo: "História da arte", link: "#" },
+    { titulo: "Cubismo", link: "#" }
+  ]
+};
+
+document.addEventListener("DOMContentLoaded", () => {
+  const disciplinaSelect = document.getElementById("disciplina");
+  if (disciplinaSelect) {
+    disciplinaSelect.addEventListener("change", exibirLivros);
+  }
+});
+
+function exibirLivros() {
+  const disciplina = document.getElementById("disciplina").value;
+  const container = document.getElementById("livros-container");
+  container.innerHTML = ""; 
+
+  if (livrosDidaticos[disciplina]) {
+    livrosDidaticos[disciplina].forEach(livro => {
+      const divLivro = document.createElement("div");
+      divLivro.className = "livro";
+      divLivro.innerHTML = `<strong>${livro.titulo}</strong> - <a href="${livro.link}" target="_blank">Acessar</a>`;
+      container.appendChild(divLivro);
+    });
+  }
+}
+
+const turmas = {
+  "1ª série": ["ana", "mario", "carla"],
+  "2ª série": ["joao", "livia"],
+  "3ª série": ["felipe", "bruna"],
+  "4ª série": ["lucas"],
+  "5ª série": [],
+  "6ª série": [],
+  "7ª série": [],
+  "8ª série": []
+};
+// MEXER NISSO DEPOIS
+
+const professoresPorSerie = {
+  "telaprofessor": ["1ª série", "2ª série"]
+};
+
+//MEXER NISSO DEPOIS
+
+function mostrarFrequencia() {
+  document.getElementById("frequencia-container").style.display = "block";
+  const turmaSelect = document.getElementById("turma-frequencia");
+  turmaSelect.innerHTML = "<option value=''>-- Selecione --</option>";
+
+  const usuarioLogado = document.getElementById("login").value.trim().toLowerCase();
+  const series = professoresPorSerie[usuarioLogado] || [];
+
+  series.forEach(serie => {
+    const option = document.createElement("option");
+    option.value = serie;
+    option.textContent = serie;
+    turmaSelect.appendChild(option);
+  });
+}
+
+function carregarAlunosTurma() {
+  const turma = document.getElementById("turma-frequencia").value;
+  const alunos = turmas[turma] || [];
+  const container = document.getElementById("alunos-frequencia");
+  container.innerHTML = "";
+
+  alunos.forEach(aluno => {
+    const div = document.createElement("div");
+    div.innerHTML = `
+      <label>
+        <input type="checkbox" id="freq-${aluno}" /> ${aluno}
+      </label>
+    `;
+    container.appendChild(div);
+  });
+}
+
+function salvarFrequencia() {
+  const turma = document.getElementById("turma-frequencia").value;
+  if (!turma) {
+    alert("Selecione uma série.");
+    return;
+  }
+
+  const alunos = turmas[turma] || [];
+  const frequencia = {};
+
+  alunos.forEach(aluno => {
+    const presente = document.getElementById(`freq-${aluno}`).checked;
+    frequencia[aluno] = presente ? "Presente" : "Faltou";
+  });
+
+  const hoje = new Date().toLocaleDateString();
+  localStorage.setItem(`frequencia_${turma}_${hoje}`, JSON.stringify(frequencia));
+  alert("Frequência salva com sucesso!");
+}
