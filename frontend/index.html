@@ -28,80 +28,185 @@
   </section>
 
   <section id="area-aluno">
-    <h1>Área do Aluno</h1>
+  <h1>Área do Aluno</h1>
+
+  <div id="aluno-menu">
+    <button onclick="abrirFuncionalidade('aluno', 'boletim')">Boletim</button>
+    <button onclick="abrirFuncionalidade('aluno', 'frequencia')">Frequência escolar</button>
+    <button onclick="abrirFuncionalidade('aluno', 'material')">Material didático</button>
+    <button onclick="abrirFuncionalidade('aluno', 'turma')">Turma virtual</button>
+    <button onclick="abrirFuncionalidade('aluno', 'suporte')">Suporte</button>
+  </div>
+
+  <div id="aluno-funcionalidade-boletim" class="funcionalidade">
     <h2>Boletim</h2>
-    <h2>Frequência escolar</h2>
-    <div id="material-didatico">
-    <h2>Material didático</h2>
+    <p>Conteúdo do boletim.</p>
+    <button onclick="fecharFuncionalidade('aluno')">Voltar</button>
+  </div>
+
+  <div id="aluno-funcionalidade-frequencia" class="funcionalidade">
+    <h2>Frequência Escolar</h2>
+    <p>Conteúdo da frequência.</p>
+    <button onclick="fecharFuncionalidade('aluno')">Voltar</button>
+  </div>
+
+  <div id="aluno-funcionalidade-material" class="funcionalidade">
+    <h2>Material Didático</h2>
     <div id="selecionar-disciplina">
       <label for="disciplina">Selecione a disciplina:</label>
-      <select id="disciplina">
-        <option value="">-- Escolha --</option>
-        <option value="portugues">Português</option>
-        <option value="matematica">Matemática</option>
-        <option value="historia">História</option>
-        <option value="geografia">Geografia</option>
-        <option value="ciencias">Ciências</option>
-        <option value="filosofia">Filosofia</option>
-        <option value="artes">Artes</option>
-      </select>
+      <select id="disciplina"></select>
     </div>
     <div id="livros-container"></div>
+    <button onclick="fecharFuncionalidade('aluno')">Voltar</button>
   </div>
-    <h2>Turma virtual</h2>
+
+  <div id="aluno-funcionalidade-turma" class="funcionalidade">
+    <h2>Turma Virtual</h2>
+    <p>Conteúdo da turma virtual.</p>
+    <button onclick="fecharFuncionalidade('aluno')">Voltar</button>
+  </div>
+
+  <div id="aluno-funcionalidade-suporte" class="funcionalidade">
     <h2>Suporte</h2>
-  </section>
+    <p>Conteúdo do suporte ao aluno.</p>
+    <button onclick="fecharFuncionalidade('aluno')">Voltar</button>
+  </div>
+</section>
 
   <section id="area-professor">
-    <div id="professor-menu">
-  <button onclick="mostrarFrequencia()">Frequência</button>
-  <button>Boletim</button>
-  <button>Turma virtual</button>
-  <button>Material didático</button>
-  <button>Suporte</button>
+  <h1>Área do Professor</h1>
+
+  <div id="professor-menu">
+    <button onclick="abrirFuncionalidade('professor', 'frequencia');mostrarFrequencia()">Frequência</button>
+    <button onclick="abrirFuncionalidade('professor', 'historico');mostrarHistoricoFrequencia()">Ver Histórico de Frequência</button>
+    <button onclick="abrirFuncionalidade('professor', 'boletim')">Boletim</button>
+    <button onclick="abrirFuncionalidade('professor', 'turma')">Turma virtual</button>
+    <button onclick="abrirFuncionalidade('professor', 'material');mostrarMaterialProfessor()">Material didático</button>
+    <button onclick="abrirFuncionalidade('professor', 'suporte')">Suporte</button>
+  </div>
+
+  <div id="professor-funcionalidade-frequencia" class="funcionalidade">
+    <h2>Registrar Frequência</h2>
+    <label for="turma-frequencia">Selecione a série:</label>
+    <select id="turma-frequencia" onchange="carregarAlunosTurma()"></select>
+    <div id="alunos-frequencia"></div>
+    <button onclick="salvarFrequencia()" class="botao-salvar">Salvar Frequência</button>
+    <button onclick="fecharFuncionalidade('professor')">Voltar</button>
+  </div>
+
+  <div id="professor-funcionalidade-historico" class="funcionalidade">
+  <h2>Histórico de Frequência</h2>
+  <div id="historico-frequencia-container"></div>
+  <button onclick="fecharFuncionalidade('professor')">Voltar</button>
 </div>
 
-<div id="frequencia-container">
-  <h2>Registrar Frequência</h2>
-  
-  <label for="turma-frequencia">Selecione a série:</label>
-  <select id="turma-frequencia" onchange="carregarAlunosTurma()"></select>
+  <div id="professor-funcionalidade-boletim" class="funcionalidade">
+    <h2>Boletim</h2>
+    <p>Conteúdo do boletim do professor.</p>
+    <button onclick="fecharFuncionalidade('professor')">Voltar</button>
+  </div>
 
-  <div id="alunos-frequencia"></div>
+  <div id="professor-funcionalidade-turma" class="funcionalidade">
+    <h2>Turma Virtual</h2>
+    <p>Conteúdo da turma virtual do professor.</p>
+    <button onclick="fecharFuncionalidade('professor')">Voltar</button>
+  </div>
 
-  <button onclick="salvarFrequencia()" class="botao-salvar">Salvar Frequência</button>
+  <div id="professor-funcionalidade-material" class="funcionalidade">
+  <h2>Material Didático</h2>
+  <div id="selecionar-disciplina-prof">
+    <label for="disciplina-prof">Selecione a disciplina:</label>
+    <select id="disciplina-prof"></select>
+  </div>
+  <div id="livros-container-prof"></div>
+  <button onclick="fecharFuncionalidade('professor')">Voltar</button>
 </div>
 
-  </section>
+
+  <div id="professor-funcionalidade-suporte" class="funcionalidade">
+    <h2>Suporte</h2>
+    <p>Conteúdo de suporte para o professor.</p>
+    <button onclick="fecharFuncionalidade('professor')">Voltar</button>
+  </div>
+</section>
 
   <section id="area-funcionario">
-    <h1>Área do Funcionário</h1>
+  <h1>Área do Funcionário</h1>
+
+  <div id="funcionario-menu">
+    <button onclick="abrirFuncionalidade('funcionario', 'suporte')">Suporte</button>
+  </div>
+
+  <div id="funcionario-funcionalidade-suporte" class="funcionalidade">
     <h2>Suporte</h2>
-  </section>
+    <p>Conteúdo de suporte ao funcionário.</p>
+    <button onclick="fecharFuncionalidade('funcionario')">Voltar</button>
+  </div>
+</section>
 
   <section id="area-secretaria">
-    <h1>Área da Secretaria</h1>
-    <h2>Cadastro</h2>    
+  <h1>Área da Secretaria</h1>
+
+  <div id="secretaria-menu">
+    <button onclick="abrirFuncionalidade('secretaria', 'cadastro')">Cadastro</button>
+    <button onclick="abrirFuncionalidade('secretaria', 'reclamacoes')">Reclamações</button>
+    <button onclick="abrirFuncionalidade('secretaria', 'requisicoes')">Requisições</button>
+    <button onclick="abrirFuncionalidade('secretaria', 'usuarios')">Usuários</button>
+  </div>
+
+  <div id="secretaria-funcionalidade-cadastro" class="funcionalidade">
+    <h2>Cadastro</h2>
+    <p>Conteúdo do cadastro.</p>
+    <button onclick="fecharFuncionalidade('secretaria')">Voltar</button>
+  </div>
+
+  <div id="secretaria-funcionalidade-reclamacoes" class="funcionalidade">
     <h2>Reclamações</h2>
+    <p>Conteúdo das reclamações.</p>
+    <button onclick="fecharFuncionalidade('secretaria')">Voltar</button>
+  </div>
+
+  <div id="secretaria-funcionalidade-requisicoes" class="funcionalidade">
     <h2>Requisições</h2>
+    <p>Conteúdo das requisições.</p>
+    <button onclick="fecharFuncionalidade('secretaria')">Voltar</button>
+  </div>
+
+  <div id="secretaria-funcionalidade-usuarios" class="funcionalidade">
     <h2>Usuários</h2>
-    </section>
+    <p>Gerenciamento de usuários.</p>
+    <button onclick="fecharFuncionalidade('secretaria')">Voltar</button>
+  </div>
+</section>
 
   <section id="area-suporte">
-    <h1>Área de Suporte</h1>
-  </section>
+  <h1>Área de Suporte</h1>
+
+  <div id="suporte-menu">
+    <button onclick="abrirFuncionalidade('suporte', 'painel')">Painel de suporte</button>
+  </div>
+
+  <div id="suporte-funcionalidade-painel" class="funcionalidade">
+    <h2>Painel de Suporte</h2>
+    <p>Ferramentas e recursos do suporte.</p>
+    <button onclick="fecharFuncionalidade('suporte')">Voltar</button>
+  </div>
+</section>
+
 
   <section id="criar-usuario-section">
     <h2>Criar novo usuário</h2>
     <input type="text" id="novo-usuario" placeholder="Novo login" />
     <input type="password" id="nova-senha" placeholder="Nova senha" />
-    <select id="tipo-usuario">
-      <option value="">Selecione o tipo</option>
-      <option value="aluno">Aluno</option>
-      <option value="professor">Professor</option>
-      <option value="funcionario">Funcionário</option>
-      <option value="secretaria">Secretaria</option>
+
+    <select id="tipo-usuario" onchange="atualizarCamposExtras()">
+    <option value="">Selecione o tipo</option>
+    <option value="aluno">Aluno</option>
+    <option value="professor">Professor</option>
+    <option value="funcionario">Funcionário</option>
+    <option value="secretaria">Secretaria</option>
     </select>
+    <div id="campos-extras"></div>
     <button onclick="criarUsuario()">Criar</button>
     <button onclick="voltarLogin()">Voltar</button>
   </section>
