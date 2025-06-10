@@ -29,34 +29,62 @@
 
   <section id="area-aluno">
     <h1>Área do Aluno</h1>
-    <h1>Boletim</h1>
-    <h1>Frequência escolar</h1>
-    <h1>Material didático</h1>
-    <h1>Turma virtual</h1>
-    <h1>Suporte</h1>
+    <h2>Boletim</h2>
+    <h2>Frequência escolar</h2>
+    <div id="material-didatico">
+    <h2>Material didático</h2>
+    <div id="selecionar-disciplina">
+      <label for="disciplina">Selecione a disciplina:</label>
+      <select id="disciplina">
+        <option value="">-- Escolha --</option>
+        <option value="portugues">Português</option>
+        <option value="matematica">Matemática</option>
+        <option value="historia">História</option>
+        <option value="geografia">Geografia</option>
+        <option value="ciencias">Ciências</option>
+        <option value="filosofia">Filosofia</option>
+        <option value="artes">Artes</option>
+      </select>
+    </div>
+    <div id="livros-container"></div>
+  </div>
+    <h2>Turma virtual</h2>
+    <h2>Suporte</h2>
   </section>
 
   <section id="area-professor">
-    <h1>Área do Professor</h1>
-    <h1>Série</h1>
-    <h1>Frequência</h1>
-    <h1>Boletim</h1>
-    <h1>Turma virtual</h1>
-    <h1>Material didático</h1>
-    <h1>Suporte</h1>
+    <div id="professor-menu">
+  <button onclick="mostrarFrequencia()">Frequência</button>
+  <button>Boletim</button>
+  <button>Turma virtual</button>
+  <button>Material didático</button>
+  <button>Suporte</button>
+</div>
+
+<div id="frequencia-container">
+  <h2>Registrar Frequência</h2>
+  
+  <label for="turma-frequencia">Selecione a série:</label>
+  <select id="turma-frequencia" onchange="carregarAlunosTurma()"></select>
+
+  <div id="alunos-frequencia"></div>
+
+  <button onclick="salvarFrequencia()" class="botao-salvar">Salvar Frequência</button>
+</div>
+
   </section>
 
   <section id="area-funcionario">
     <h1>Área do Funcionário</h1>
-    <h1>Suporte</h1>
+    <h2>Suporte</h2>
   </section>
 
   <section id="area-secretaria">
     <h1>Área da Secretaria</h1>
-    <h1>Cadastro</h1>    
-    <h1>Reclamações</h1>
-    <h1>Requisições</h1>
-    <h1>Usuários</h1>
+    <h2>Cadastro</h2>    
+    <h2>Reclamações</h2>
+    <h2>Requisições</h2>
+    <h2>Usuários</h2>
     </section>
 
   <section id="area-suporte">
