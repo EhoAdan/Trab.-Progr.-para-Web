@@ -29,6 +29,12 @@ document.addEventListener("DOMContentLoaded", () => {
         }
       });
     }
+    const temaSalvo = localStorage.getItem("tema") || "claro";
+    document.body.classList.toggle("dark-mode", temaSalvo === "escuro");
+    const seletor = document.getElementById("seletor-tema");
+    if (seletor) {seletor.value = temaSalvo;}
+
+
     const loginInput = document.getElementById("login");
     const senhaInput = document.getElementById("senha");
   
@@ -88,10 +94,9 @@ document.addEventListener("DOMContentLoaded", () => {
       else if (tipo === "suporte") document.getElementById("area-suporte").style.display = "block";
   
       document.getElementById("login-section").style.display = "none";
-      document.getElementById("btn-logout").style.display = "block";
-    } else {
-      alert("Usuário ou senha incorretos.");
-    }
+      document.getElementById("btn-logout").style.display = "block";}
+      
+       else {alert("Usuário ou senha incorretos.");}
   }
   
   function logout() {
@@ -103,6 +108,7 @@ document.addEventListener("DOMContentLoaded", () => {
     document.getElementById("senha").value = "";
     document.getElementById("criar-usuario-section").style.display = "none";
     document.getElementById("redefinir-senha-section").style.display = "none";
+
   }
   
   function esconderTodasAreas() {
@@ -506,3 +512,9 @@ document.addEventListener("DOMContentLoaded", () => {
     const container = document.getElementById("livros-container-prof");
     container.innerHTML = "";
   }
+  function mudarTemaPorSelecao(select) {
+    const tema = select.value;
+    document.body.classList.toggle("dark-mode", tema === "escuro");
+    localStorage.setItem("tema", tema);
+  }
+  
