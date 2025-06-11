@@ -7,7 +7,20 @@
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-  <button id="btn-logout" onclick="logout()">Sair</button>
+    <div id="barra-topo">
+        <select id="seletor-tema" onchange="mudarTemaPorSelecao(this)">
+          <option value="claro">Tema Claro</option>
+          <option value="escuro">Tema Escuro</option>
+        </select>
+        <button id="btn-logout" onclick="logout()">Sair</button>
+      </div>
+      
+        <div id="logout-container">
+          <button id="btn-logout" onclick="logout()">Sair</button>
+        </div>
+      </div>
+      
+      
 
   <section id="login-section">
     <h2>Login:</h2>
