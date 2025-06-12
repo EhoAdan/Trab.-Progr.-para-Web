@@ -341,3 +341,33 @@ body.dark-mode a[disabled] {
 body.dark-mode .login-actions p {
   color: #fff;
 }
+
+body:not(.dark-mode) input[type="text"],
+body:not(.dark-mode) input[type="password"],
+body:not(.dark-mode) textarea,
+body:not(.dark-mode) select {
+  background-color: #f9f9f9;
+  color: #000;
+  border: 1px solid #ccc;
+}
+
+body.dark-mode input[type="text"],
+body.dark-mode input[type="password"],
+body.dark-mode textarea,
+body.dark-mode select {
+  background-color: #333;
+  color: #fff;
+  border: 1px solid #666;
+}
+
+body.dark-mode .bloco-frequencia {
+  background-color: #2c2c2c;
+  color: #f0f0f0;
+}
+
+input:focus,
+textarea:focus,
+select:focus {
+  outline: none;
+  box-shadow: 0 0 0 2px rgba(0,123,255,0.3);
+}
