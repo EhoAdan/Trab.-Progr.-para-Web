@@ -1,24 +1,16 @@
 document.addEventListener("DOMContentLoaded", () => {
     esconderTodasAreas();
     document.getElementById("login-section").style.display = "block";
-  
     const btnVerSenha = document.getElementById("btn-ver-senha");
-    if (btnVerSenha) {
-      btnVerSenha.addEventListener("click", alternarSenha);
-    }
-  
+    if (btnVerSenha) {btnVerSenha.addEventListener("click", alternarSenha)}
     const disciplinaSelect = document.getElementById("disciplina");
-    if (disciplinaSelect) {
-      disciplinaSelect.addEventListener("change", exibirLivros);
-    }
-  
+    if (disciplinaSelect) {disciplinaSelect.addEventListener("change", exibirLivros);}
     const selectProf = document.getElementById("disciplina-prof");
     if (selectProf) {
       selectProf.addEventListener("change", () => {
         const disciplina = selectProf.value;
         const container = document.getElementById("livros-container-prof");
         container.innerHTML = "";
-  
         if (livrosDidaticos[disciplina]) {
           livrosDidaticos[disciplina].forEach(livro => {
             const divLivro = document.createElement("div");
@@ -33,7 +25,6 @@ document.addEventListener("DOMContentLoaded", () => {
     document.body.classList.toggle("dark-mode", temaSalvo === "escuro");
     const seletor = document.getElementById("seletor-tema");
     if (seletor) {seletor.value = temaSalvo;}
-
 
     const loginInput = document.getElementById("login");
     const senhaInput = document.getElementById("senha");
@@ -63,9 +54,7 @@ document.addEventListener("DOMContentLoaded", () => {
     ...JSON.parse(localStorage.getItem("usuarios") || "{}")
   };
   
-  function salvarUsuarios() {
-    localStorage.setItem("usuarios", JSON.stringify(usuarios));
-  }
+  function salvarUsuarios() {localStorage.setItem("usuarios", JSON.stringify(usuarios));}
   salvarUsuarios();
   
   function fecharTodasFuncionalidades() {
@@ -74,7 +63,6 @@ document.addEventListener("DOMContentLoaded", () => {
   
     const todosMenus = document.querySelectorAll("#aluno-menu, #professor-menu, #funcionario-menu, #secretaria-menu, #suporte-menu");
     todosMenus.forEach(menu => menu.style.display = "block");}
-  
 
   function fazerLogin() {
     const usuario = document.getElementById('login').value.trim().toLowerCase();
@@ -94,9 +82,9 @@ document.addEventListener("DOMContentLoaded", () => {
       else if (tipo === "suporte") document.getElementById("area-suporte").style.display = "block";
   
       document.getElementById("login-section").style.display = "none";
-      document.getElementById("btn-logout").style.display = "block";}
+      document.getElementById("btn-logout").style.display = "block"}
       
-       else {alert("Usuário ou senha incorretos.");}
+       else {alert("Usuário ou senha incorretos.")}
   }
   
   function logout() {
@@ -108,8 +96,7 @@ document.addEventListener("DOMContentLoaded", () => {
     document.getElementById("senha").value = "";
     document.getElementById("criar-usuario-section").style.display = "none";
     document.getElementById("redefinir-senha-section").style.display = "none";
-
-  }
+}
   
   function esconderTodasAreas() {
     document.getElementById("area-aluno").style.display = "none";
@@ -172,9 +159,7 @@ document.addEventListener("DOMContentLoaded", () => {
   }
   
   else if (tipo === "professor") {
-    const selecionadas = Array.from(document.querySelectorAll(".disciplinas-professor:checked"))
-      .map(el => el.value);
-  
+    const selecionadas = Array.from(document.querySelectorAll(".disciplinas-professor:checked")).map(el => el.value);
     if (selecionadas.length === 0) {
       alert("Selecione ao menos uma disciplina que o professor leciona.");
       return;
@@ -183,9 +168,7 @@ document.addEventListener("DOMContentLoaded", () => {
     usuarios[nome] = { senha, tipo, disciplinas: selecionadas };
   }
   
-  else {
-    usuarios[nome] = { senha, tipo };
-  }
+  else {usuarios[nome] = {senha, tipo}}
     salvarUsuarios();
     alert("Usuário criado com sucesso!");
     voltarLogin();
@@ -317,7 +300,6 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
   
-  
   function salvarFrequencia() {
     const turma = document.getElementById("turma-frequencia").value;
     if (!turma) {
@@ -345,6 +327,9 @@ document.addEventListener("DOMContentLoaded", () => {
   
     const conteudo = document.getElementById(`${area}-funcionalidade-${nome}`);
     if (conteudo) conteudo.style.display = "block";
+    if (nome === "suporte" && ["aluno", "professor", "funcionario"].includes(area)) {
+  mostrarHistoricoUsuario(area);
+}
   }
   
   function fecharFuncionalidade(area) {
@@ -354,7 +339,6 @@ document.addEventListener("DOMContentLoaded", () => {
     const menu = document.getElementById(`${area}-menu`);
     if (menu) menu.style.display = "block";
   }
-  
   
   function mostrarHistoricoFrequencia() {
     const container = document.getElementById("historico-frequencia-container");
@@ -474,6 +458,7 @@ document.addEventListener("DOMContentLoaded", () => {
       });
     }
   }
+
   function mostrarMaterialProfessor() {
     const usuario = document.getElementById("login").value.trim().toLowerCase();
     const prof = usuarios[usuario];
@@ -481,21 +466,16 @@ document.addEventListener("DOMContentLoaded", () => {
     if (prof && prof.tipo === "professor") {
       let disciplinas = [];
   
-      if (Array.isArray(prof.disciplinas)) {
-        disciplinas = prof.disciplinas;
-      } else if (typeof prof.disciplinas === "string") {
-        disciplinas = [prof.disciplinas];
-      } else if (typeof prof.disciplina === "string") {
-        disciplinas = [prof.disciplina];
-      }
+      if (Array.isArray(prof.disciplinas)) {disciplinas = prof.disciplinas}
+      else if (typeof prof.disciplinas === "string") {disciplinas = [prof.disciplinas]} 
+      else if (typeof prof.disciplina === "string") {disciplinas = [prof.disciplina]}
       if (disciplinas.length === 0) {
         alert("Nenhuma disciplina cadastrada para este professor.");
         return;
       }
-      carregarDisciplinasParaProfessor(disciplinas);
-    } else {
-      alert("Usuário atual não é um professor válido.");
-    }
+      carregarDisciplinasParaProfessor(disciplinas);} 
+    
+      else {alert("Usuário atual não é um professor válido.");}
   }
   
   function carregarDisciplinasParaProfessor(disciplinas) {
@@ -512,9 +492,291 @@ document.addEventListener("DOMContentLoaded", () => {
     const container = document.getElementById("livros-container-prof");
     container.innerHTML = "";
   }
+
   function mudarTemaPorSelecao(select) {
     const tema = select.value;
     document.body.classList.toggle("dark-mode", tema === "escuro");
     localStorage.setItem("tema", tema);
   }
-  
+
+function mostrarRespostaSalva(tipoUsuario, destino) {
+  const chave = `mensagem_${tipoUsuario}_${destino}`;
+  const dados = JSON.parse(localStorage.getItem(chave));
+  const respostaDiv = document.getElementById(`resposta-${tipoUsuario}`);
+
+  if (dados && dados.resposta) {
+    respostaDiv.innerHTML += `
+      <p><strong>Resposta de ${destino}:</strong> ${dados.resposta}</p>
+    `;
+  }
+}
+
+  function enviarMensagemSuporte(tipoUsuario) {
+  const tipoSelect = document.getElementById(`tipo-mensagem-${tipoUsuario}`);
+  const mensagemInput = document.getElementById(`mensagem-${tipoUsuario}`);
+  const respostaDiv = document.getElementById(`resposta-${tipoUsuario}`);
+
+  const tipo = tipoSelect.value;
+  const texto = mensagemInput.value.trim();
+
+  if (!tipo || !texto) {
+    alert("Por favor, selecione o tipo e escreva uma mensagem.");
+    return;
+  }
+
+  const destino = tipo === "ajuda" ? "suporte" : "secretaria";
+  const chave = `mensagens_${tipoUsuario}_${destino}`;
+
+  const historico = JSON.parse(localStorage.getItem(chave)) || [];
+
+  const novaMensagem = {
+    de: tipoUsuario,
+    para: destino,
+    texto,
+    data: new Date().toLocaleString(),
+    resposta: null
+  };
+
+  historico.push(novaMensagem);
+  localStorage.setItem(chave, JSON.stringify(historico));
+
+  respostaDiv.innerHTML = `<p id="mensagem-sucesso-${tipoUsuario}" style="color: green;">Mensagem enviada para ${destino}.</p>`;
+
+  setTimeout(() => {
+    const msg = document.getElementById(`mensagem-sucesso-${tipoUsuario}`);
+    if (msg) msg.remove();
+    mostrarHistoricoUsuario(tipoUsuario);
+  }, 5000);
+  mensagemInput.value = "";
+  tipoSelect.value = "";
+}
+
+function mostrarRequisicoesSuporte() {
+  const container = document.getElementById("painel-ajuda-suporte");
+  container.innerHTML = "";
+
+  const mensagens = [];
+
+  Object.keys(localStorage).forEach(chave => {
+    if (chave.startsWith("mensagens_") && chave.endsWith("_suporte")) {
+      const partes = chave.split("_");
+      const remetente = partes[1];
+      const lista = JSON.parse(localStorage.getItem(chave) || "[]");
+
+      lista.forEach((msg, i) => {
+        mensagens.push({ remetente, msg, chave, index: i });
+      });
+    }
+  });
+
+  if (mensagens.length === 0) {
+    container.innerHTML = "<p><em>Nenhuma requisição registrada até o momento.</em></p>";
+    return;
+  }
+
+  mensagens.forEach(({ remetente, msg, chave, index }) => {
+    const div = document.createElement("div");
+    div.style.border = "1px solid #ccc";
+    div.style.marginBottom = "10px";
+    div.style.padding = "10px";
+
+    div.innerHTML = `
+      <p><strong>De:</strong> ${remetente}</p>
+      <p><strong>Mensagem:</strong> ${msg.texto}</p>
+      <p><strong>Data:</strong> ${msg.data}</p>
+    `;
+
+    if (msg.resposta) {
+      div.innerHTML += `<p style="color:green;"><strong>Resposta:</strong> ${msg.resposta}</p>`;
+    } else {
+      div.innerHTML += `
+        <textarea id="resposta-${chave}-${index}" placeholder="Responder..." style="width:100%;margin-top:5px;"></textarea>
+        <button onclick="responderMensagem('${chave}', ${index})">Enviar resposta</button>
+      `;
+    }
+
+    container.appendChild(div);
+  });
+}
+
+function mostrarReclamacoesSecretaria() {
+  const container = document.getElementById("painel-reclamacoes-secretaria");
+  container.innerHTML = "";
+
+  const mensagens = [];
+
+  Object.keys(localStorage).forEach(chave => {
+    if (chave.startsWith("mensagens_") && chave.endsWith("_secretaria")) {
+      const partes = chave.split("_");
+      const remetente = partes[1];
+      const lista = JSON.parse(localStorage.getItem(chave) || "[]");
+
+      lista.forEach((msg, i) => {
+        mensagens.push({ remetente, msg, chave, index: i });
+      });
+    }
+  });
+
+  if (mensagens.length === 0) {
+    container.innerHTML = "<p><em>Nenhuma reclamação registrada ainda.</em></p>";
+    return;
+  }
+
+  mensagens.forEach(({ remetente, msg, chave, index }) => {
+    const div = document.createElement("div");
+    div.style.border = "1px solid #ccc";
+    div.style.marginBottom = "10px";
+    div.style.padding = "10px";
+
+    div.innerHTML = `
+      <p><strong>De:</strong> ${remetente}</p>
+      <p><strong>Mensagem:</strong> ${msg.texto}</p>
+      <p><strong>Data:</strong> ${msg.data}</p>
+    `;
+
+    if (msg.resposta) {
+      div.innerHTML += `<p style="color:green;"><strong>Resposta:</strong> ${msg.resposta}</p>`;
+    } else {
+      div.innerHTML += `
+        <textarea id="resposta-${chave}-${index}" placeholder="Responder..." style="width:100%;margin-top:5px;"></textarea>
+        <button onclick="responderMensagem('${chave}', ${index})">Enviar resposta</button>
+      `;
+    }
+
+    container.appendChild(div);
+  });
+}
+
+
+function enviarReclamacaoSuporte() {
+  const texto = document.getElementById("mensagem-reclamacao-suporte").value.trim();
+  if (!texto) return alert("Digite a reclamação.");
+
+  const dados = { de: "suporte", para: "secretaria", texto, resposta: null };
+  localStorage.setItem("mensagem_suporte_secretaria", JSON.stringify(dados));
+  document.getElementById("confirmacao-reclamacao-suporte").innerHTML = "<p style='color:green'>Reclamação enviada à Secretaria.</p>";
+  document.getElementById("mensagem-reclamacao-suporte").value = "";
+}
+
+function enviarAjudaSecretaria() {
+  const texto = document.getElementById("mensagem-ajuda-secretaria").value.trim();
+  if (!texto) return alert("Digite a mensagem.");
+
+  const dados = { de: "secretaria", para: "suporte", texto, resposta: null };
+  localStorage.setItem("mensagem_secretaria_suporte", JSON.stringify(dados));
+  document.getElementById("confirmacao-ajuda-secretaria").innerHTML = "<p style='color:green'>Mensagem enviada ao Suporte.</p>";
+  document.getElementById("mensagem-ajuda-secretaria").value = "";
+}
+
+function responderMensagem(chave, index) {
+  const textarea = document.getElementById(`resposta-${chave}-${index}`);
+  const resposta = textarea.value.trim();
+  if (!resposta) return alert("Digite a resposta.");
+
+  const mensagens = JSON.parse(localStorage.getItem(chave) || "[]");
+  if (mensagens[index].resposta) {
+    alert("Esta mensagem já foi respondida.");
+    return;
+  }
+
+  mensagens[index].resposta = resposta;
+  localStorage.setItem(chave, JSON.stringify(mensagens));
+  alert("Resposta enviada.");
+  textarea.parentElement.querySelector("button").remove();
+  textarea.remove();
+
+  const respostaVisual = document.createElement("p");
+  respostaVisual.style.color = "green";
+  respostaVisual.innerHTML = `<strong>Resposta:</strong> ${resposta}`;
+  textarea.parentElement.appendChild(respostaVisual);
+}
+
+function mostrarHistoricoMensagens(tipoUsuario, destino) {
+  const container = document.getElementById(`resposta-${tipoUsuario}`);
+  container.innerHTML = "";
+
+  const chave = `mensagens_${tipoUsuario}_${destino}`;
+  const mensagens = JSON.parse(localStorage.getItem(chave) || "[]");
+
+  if (mensagens.length === 0) {
+    container.innerHTML = `<p style="color: gray;"><em>Nenhuma solicitação registrada ainda.</em></p>`;
+    return;
+  }
+
+  mensagens.forEach((msg) => {
+    const bloco = document.createElement("div");
+    bloco.style.border = "1px solid #ccc";
+    bloco.style.padding = "10px";
+    bloco.style.marginBottom = "10px";
+    bloco.innerHTML = `
+      <p><strong>Enviado em:</strong> ${msg.data}</p>
+      <p><strong>Mensagem:</strong> ${msg.texto}</p>
+      ${
+        msg.resposta
+          ? `<p style="color:green"><strong>Resposta:</strong> ${msg.resposta}</p>`
+          : "<p style='color:gray'><em>Aguardando resposta</em></p>"
+      }
+    `;
+    container.appendChild(bloco);
+  });
+}
+
+function mostrarHistoricoUsuario(tipoUsuario) {
+  const container = document.getElementById(`resposta-${tipoUsuario}`);
+  container.innerHTML = "";
+
+  const chaveReq = `mensagens_${tipoUsuario}_suporte`;
+  const requisicoes = JSON.parse(localStorage.getItem(chaveReq) || "[]");
+
+  const blocoReq = document.createElement("div");
+  blocoReq.innerHTML = `<h3>Histórico de Requisições</h3>`;
+
+  if (requisicoes.length === 0) {
+    const vazio = document.createElement("p");
+    vazio.style.color = "gray";
+    vazio.innerHTML = "<em>Nenhuma solicitação registrada ainda.</em>";
+    blocoReq.appendChild(vazio);
+  } else {
+    requisicoes.forEach(msg => {
+      const div = document.createElement("div");
+      div.className = "bloco-mensagem";
+      div.innerHTML = `
+        <p><strong>Data:</strong> ${msg.data}</p>
+        <p><strong>Mensagem:</strong> ${msg.texto}</p>
+        ${msg.resposta
+          ? `<p style="color:green;"><strong>Resposta:</strong> ${msg.resposta}</p>`
+          : `<p><em>Aguardando resposta</em></p>`}
+      `;
+      blocoReq.appendChild(div);
+    });
+  }
+
+  const chaveRec = `mensagens_${tipoUsuario}_secretaria`;
+  const reclamacoes = JSON.parse(localStorage.getItem(chaveRec) || "[]");
+
+  const blocoRec = document.createElement("div");
+  blocoRec.innerHTML = `<h3>Histórico de Reclamações</h3>`;
+
+  if (reclamacoes.length === 0) {
+    const vazio = document.createElement("p");
+    vazio.style.color = "gray";
+    vazio.innerHTML = "<em>Nenhuma reclamação registrada ainda.</em>";
+    blocoRec.appendChild(vazio);
+  } else {
+    reclamacoes.forEach(msg => {
+      const div = document.createElement("div");
+      div.className = "bloco-mensagem";
+      div.innerHTML = `
+        <p><strong>Data:</strong> ${msg.data}</p>
+        <p><strong>Mensagem:</strong> ${msg.texto}</p>
+        ${msg.resposta
+          ? `<p style="color:green;"><strong>Resposta:</strong> ${msg.resposta}</p>`
+          : `<p><em>Aguardando resposta</em></p>`}
+      `;
+      blocoRec.appendChild(div);
+    });
+  }
+
+  container.appendChild(blocoReq);
+  container.appendChild(blocoRec);
+}
