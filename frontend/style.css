@@ -55,7 +55,6 @@
   font-weight: bold;
   color: inherit;
 }
-
   
   #login-section,
   #criar-usuario-section,
@@ -234,7 +233,6 @@
     border-radius: 8px;
     z-index: 999;
   }
- 
   
   #tema-container,
   #logout-container {
@@ -392,6 +390,7 @@ body {
 body.dark-mode {
   background-color: #0d0632;
 }
+
 
 body.dark-mode #barra-topo {
   background-color: #000b18;
