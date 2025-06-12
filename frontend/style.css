@@ -47,6 +47,15 @@
   #area-suporte {
     display: none;
   }
+
+  .bem-vindo {
+  text-align: center;
+  margin-bottom: 20px;
+  font-size: 23px;
+  font-weight: bold;
+  color: inherit;
+}
+
   
   #login-section,
   #criar-usuario-section,
@@ -159,7 +168,7 @@
   .funcionalidade {
     display: none;
     margin-top: 20px;
-    background-color: white;
+    background-color: rgb(93, 93, 93);
     padding: 20px;
     border-radius: 8px;
     box-shadow: 0 0 8px rgba(0, 0, 0, 0.1);
