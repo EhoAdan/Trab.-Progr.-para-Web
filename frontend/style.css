@@ -301,4 +301,43 @@
   main, section, #login-section {
     margin-top: 120px;
   }
-  
+
+  body {
+    color: #000
+  }
+
+  body.dark-mode {
+    color:fff
+  }
+
+  input, select, textarea {
+  color: inherit;
+  background-color: inherit;
+}
+
+::placeholder {
+  color: #aaa;
+}
+
+body.dark-mode ::placeholder {
+  color: #ccc;
+}
+
+a {
+  color: #000;
+}
+
+body.dark-mode a {
+  color: #fff;
+}
+
+body.dark-mode a:disabled,
+body.dark-mode a[disabled] {
+  color: #888 !important;
+  pointer-events: none;
+  cursor: default;
+}
+
+body.dark-mode .login-actions p {
+  color: #fff;
+}
