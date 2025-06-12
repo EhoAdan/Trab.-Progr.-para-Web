@@ -371,3 +371,19 @@ select:focus {
   outline: none;
   box-shadow: 0 0 0 2px rgba(0,123,255,0.3);
 }
+
+body {
+  background-color: #a6caff;
+}
+
+#barra-topo {
+  background-color: #5588d4;
+}
+
+body.dark-mode {
+  background-color: #0d0632;
+}
+
+body.dark-mode #barra-topo {
+  background-color: #000b18;
+}
