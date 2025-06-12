@@ -546,7 +546,7 @@ function mostrarRespostaSalva(tipoUsuario, destino) {
     const msg = document.getElementById(`mensagem-sucesso-${tipoUsuario}`);
     if (msg) msg.remove();
     mostrarHistoricoUsuario(tipoUsuario);
-  }, 5000);
+  }, 3500);
   mensagemInput.value = "";
   tipoSelect.value = "";
 }
@@ -587,7 +587,7 @@ function mostrarRequisicoesSuporte() {
     `;
 
     if (msg.resposta) {
-      div.innerHTML += `<p style="color:green;"><strong>Resposta:</strong> ${msg.resposta}</p>`;
+      div.innerHTML += `<p style="color:lightgreen;"><strong>Resposta:</strong> ${msg.resposta}</p>`;
     } else {
       div.innerHTML += `
         <textarea id="resposta-${chave}-${index}" placeholder="Responder..." style="width:100%;margin-top:5px;"></textarea>
@@ -635,7 +635,7 @@ function mostrarReclamacoesSecretaria() {
     `;
 
     if (msg.resposta) {
-      div.innerHTML += `<p style="color:green;"><strong>Resposta:</strong> ${msg.resposta}</p>`;
+      div.innerHTML += `<p style="color:lightgreen;"><strong>Resposta:</strong> ${msg.resposta}</p>`;
     } else {
       div.innerHTML += `
         <textarea id="resposta-${chave}-${index}" placeholder="Responder..." style="width:100%;margin-top:5px;"></textarea>
@@ -654,7 +654,7 @@ function enviarReclamacaoSuporte() {
 
   const dados = { de: "suporte", para: "secretaria", texto, resposta: null };
   localStorage.setItem("mensagem_suporte_secretaria", JSON.stringify(dados));
-  document.getElementById("confirmacao-reclamacao-suporte").innerHTML = "<p style='color:green'>Reclamação enviada à Secretaria.</p>";
+  document.getElementById("confirmacao-reclamacao-suporte").innerHTML = "<p style='color:lightgreen'>Reclamação enviada à Secretaria.</p>";
   document.getElementById("mensagem-reclamacao-suporte").value = "";
 }
 
@@ -664,7 +664,7 @@ function enviarAjudaSecretaria() {
 
   const dados = { de: "secretaria", para: "suporte", texto, resposta: null };
   localStorage.setItem("mensagem_secretaria_suporte", JSON.stringify(dados));
-  document.getElementById("confirmacao-ajuda-secretaria").innerHTML = "<p style='color:green'>Mensagem enviada ao Suporte.</p>";
+  document.getElementById("confirmacao-ajuda-secretaria").innerHTML = "<p style='color:lightgreen'>Mensagem enviada ao Suporte.</p>";
   document.getElementById("mensagem-ajuda-secretaria").value = "";
 }
 
@@ -686,7 +686,7 @@ function responderMensagem(chave, index) {
   textarea.remove();
 
   const respostaVisual = document.createElement("p");
-  respostaVisual.style.color = "green";
+  respostaVisual.style.color = "lightgreen";
   respostaVisual.innerHTML = `<strong>Resposta:</strong> ${resposta}`;
   textarea.parentElement.appendChild(respostaVisual);
 }
@@ -713,7 +713,7 @@ function mostrarHistoricoMensagens(tipoUsuario, destino) {
       <p><strong>Mensagem:</strong> ${msg.texto}</p>
       ${
         msg.resposta
-          ? `<p style="color:green"><strong>Resposta:</strong> ${msg.resposta}</p>`
+          ? `<p style="color:lightgreen"><strong>Resposta:</strong> ${msg.resposta}</p>`
           : "<p style='color:gray'><em>Aguardando resposta</em></p>"
       }
     `;
@@ -744,7 +744,7 @@ function mostrarHistoricoUsuario(tipoUsuario) {
         <p><strong>Data:</strong> ${msg.data}</p>
         <p><strong>Mensagem:</strong> ${msg.texto}</p>
         ${msg.resposta
-          ? `<p style="color:green;"><strong>Resposta:</strong> ${msg.resposta}</p>`
+          ? `<p style="color:lightgreen;"><strong>Resposta:</strong> ${msg.resposta}</p>`
           : `<p><em>Aguardando resposta</em></p>`}
       `;
       blocoReq.appendChild(div);
@@ -759,7 +759,7 @@ function mostrarHistoricoUsuario(tipoUsuario) {
 
   if (reclamacoes.length === 0) {
     const vazio = document.createElement("p");
-    vazio.style.color = "gray";
+    vazio.style.color = "lightgray";
     vazio.innerHTML = "<em>Nenhuma reclamação registrada ainda.</em>";
     blocoRec.appendChild(vazio);
   } else {
@@ -770,7 +770,7 @@ function mostrarHistoricoUsuario(tipoUsuario) {
         <p><strong>Data:</strong> ${msg.data}</p>
         <p><strong>Mensagem:</strong> ${msg.texto}</p>
         ${msg.resposta
-          ? `<p style="color:green;"><strong>Resposta:</strong> ${msg.resposta}</p>`
+          ? `<p style="color:lightgreen;"><strong>Resposta:</strong> ${msg.resposta}</p>`
           : `<p><em>Aguardando resposta</em></p>`}
       `;
       blocoRec.appendChild(div);
