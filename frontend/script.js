@@ -25,17 +25,13 @@ document.addEventListener("DOMContentLoaded", () => {
     document.body.classList.toggle("dark-mode", temaSalvo === "escuro");
     const seletor = document.getElementById("seletor-tema");
     if (seletor) {seletor.value = temaSalvo;}
-
     const loginInput = document.getElementById("login");
     const senhaInput = document.getElementById("senha");
-  
     [loginInput, senhaInput].forEach(input => {
       input.addEventListener("keypress", function (e) {
         if (e.key === "Enter") {
           const usuario = loginInput.value.trim();
-          if (usuario !== "") {
-            fazerLogin();
-          }
+          if (usuario !== "") {fazerLogin();}
         }
       });
     });
@@ -56,11 +52,9 @@ document.addEventListener("DOMContentLoaded", () => {
   
   function salvarUsuarios() {localStorage.setItem("usuarios", JSON.stringify(usuarios));}
   salvarUsuarios();
-  
   function fecharTodasFuncionalidades() {
     const todas = document.querySelectorAll(".funcionalidade");
     todas.forEach(div => div.style.display = "none");
-  
     const todosMenus = document.querySelectorAll("#aluno-menu, #professor-menu, #funcionario-menu, #secretaria-menu, #suporte-menu");
     todosMenus.forEach(menu => menu.style.display = "block");}
 
@@ -80,10 +74,8 @@ document.addEventListener("DOMContentLoaded", () => {
       else if (tipo === "funcionario") document.getElementById("area-funcionario").style.display = "block";
       else if (tipo === "secretaria") document.getElementById("area-secretaria").style.display = "block";
       else if (tipo === "suporte") document.getElementById("area-suporte").style.display = "block";
-  
       document.getElementById("login-section").style.display = "none";
       document.getElementById("btn-logout").style.display = "block"}
-      
        else {alert("Usuário ou senha incorretos.")}
   }
   
@@ -164,7 +156,6 @@ document.addEventListener("DOMContentLoaded", () => {
       alert("Selecione ao menos uma disciplina que o professor leciona.");
       return;
     }
-  
     usuarios[nome] = { senha, tipo, disciplinas: selecionadas };
   }
   
@@ -232,7 +223,6 @@ document.addEventListener("DOMContentLoaded", () => {
     const disciplina = document.getElementById("disciplina").value;
     const container = document.getElementById("livros-container");
     container.innerHTML = ""; 
-  
     if (livrosDidaticos[disciplina]) {
       livrosDidaticos[disciplina].forEach(livro => {
         const divLivro = document.createElement("div");
@@ -264,10 +254,8 @@ document.addEventListener("DOMContentLoaded", () => {
   function mostrarFrequencia() {
     const turmaSelect = document.getElementById("turma-frequencia");
     turmaSelect.innerHTML = "<option value=''>-- Selecione --</option>";
-  
     const usuarioLogado = document.getElementById("login").value.trim().toLowerCase();
     const series = professoresPorSerie[usuarioLogado] || [];
-  
     series.forEach(serie => {
       const option = document.createElement("option");
       option.value = serie;
@@ -283,19 +271,13 @@ document.addEventListener("DOMContentLoaded", () => {
     const alunos = turmas[turma] || [];
     const container = document.getElementById("alunos-frequencia");
     container.innerHTML = "";
-  
     const hoje = new Date().toLocaleDateString();
     const chave = `frequencia_${turma}_${hoje}`;
     const dadosSalvos = JSON.parse(localStorage.getItem(chave) || "{}");
-  
     alunos.forEach(aluno => {
       const presente = dadosSalvos[aluno] === "Presente";
       const div = document.createElement("div");
-      div.innerHTML = `
-        <label>
-          <input type="checkbox" id="freq-${aluno}" ${presente ? "checked" : ""} /> ${aluno}
-        </label>
-      `;
+      div.innerHTML = `<label><input type="checkbox" id="freq-${aluno}" ${presente ? "checked" : ""} /> ${aluno}</label>`;
       container.appendChild(div);
     });
   }
@@ -309,12 +291,10 @@ document.addEventListener("DOMContentLoaded", () => {
   
     const alunos = turmas[turma] || [];
     const frequencia = {};
-  
     alunos.forEach(aluno => {
       const presente = document.getElementById(`freq-${aluno}`).checked;
       frequencia[aluno] = presente ? "Presente" : "Faltou";
     });
-  
     const hoje = new Date().toLocaleDateString();
     localStorage.setItem(`frequencia_${turma}_${hoje}`, JSON.stringify(frequencia));
     alert("Frequência salva com sucesso!");
@@ -324,18 +304,14 @@ document.addEventListener("DOMContentLoaded", () => {
     fecharFuncionalidade(area);
     const menu = document.getElementById(`${area}-menu`);
     if (menu) menu.style.display = "none";
-  
     const conteudo = document.getElementById(`${area}-funcionalidade-${nome}`);
     if (conteudo) conteudo.style.display = "block";
-    if (nome === "suporte" && ["aluno", "professor", "funcionario"].includes(area)) {
-  mostrarHistoricoUsuario(area);
-}
+    if (nome === "suporte" && ["aluno", "professor", "funcionario"].includes(area)) {mostrarHistoricoUsuario(area);}
   }
   
   function fecharFuncionalidade(area) {
     const funcionalidades = document.querySelectorAll(`#area-${area} .funcionalidade`);
     funcionalidades.forEach(div => div.style.display = "none");
-  
     const menu = document.getElementById(`${area}-menu`);
     if (menu) menu.style.display = "block";
   }
@@ -343,7 +319,6 @@ document.addEventListener("DOMContentLoaded", () => {
   function mostrarHistoricoFrequencia() {
     const container = document.getElementById("historico-frequencia-container");
     container.innerHTML = "";
-  
     const dados = Object.keys(localStorage)
       .filter(chave => chave.startsWith("frequencia_"))
       .map(chave => {
@@ -353,24 +328,20 @@ document.addEventListener("DOMContentLoaded", () => {
         const registros = JSON.parse(localStorage.getItem(chave));
         return { turma, data, registros };
       });
-  
     if (dados.length === 0) {
       container.innerHTML = "<p>Nenhuma frequência registrada ainda.</p>";
       return;
     }
-  
     dados.forEach(item => {
       const bloco = document.createElement("div");
       bloco.className = "bloco-frequencia";
       bloco.innerHTML = `<h3>${item.turma} - ${item.data}</h3>`;
-  
       const lista = document.createElement("ul");
       for (const aluno in item.registros) {
         const li = document.createElement("li");
         li.textContent = `${aluno}: ${item.registros[aluno]}`;
         lista.appendChild(li);
       }
-  
       bloco.appendChild(lista);
       container.appendChild(bloco);
     });
@@ -386,22 +357,18 @@ document.addEventListener("DOMContentLoaded", () => {
       { nome: "Filosofia", valor: "filosofia" },
       { nome: "Artes", valor: "artes" },
     ];
-  
     const disciplinasAvancadas = [
       { nome: "Física", valor: "fisica" },
       { nome: "Química", valor: "quimica" }
     ];
-  
     const select = document.getElementById("disciplina");
     select.innerHTML = "<option value=''>-- Escolha --</option>";
-  
     disciplinasBase.forEach(d => {
       const option = document.createElement("option");
       option.value = d.valor;
       option.textContent = d.nome;
       select.appendChild(option);
     });
-  
     const turmasComFisicaQuimica = ["9º ano", "1ª série", "2ª série", "3ª série"];
     if (turmasComFisicaQuimica.includes(turmaAluno)) {
       disciplinasAvancadas.forEach(d => {
@@ -417,11 +384,9 @@ document.addEventListener("DOMContentLoaded", () => {
     const tipo = document.getElementById("tipo-usuario").value;
     const container = document.getElementById("campos-extras");
     container.innerHTML = "";
-  
     if (tipo === "aluno") {
       const select = document.createElement("select");
       select.id = "turma-aluno";
-  
       const turmasDisponiveis = Object.keys(turmas);
       select.innerHTML = "<option value=''>Selecione a turma</option>";
       turmasDisponiveis.forEach(turma => {
@@ -430,28 +395,18 @@ document.addEventListener("DOMContentLoaded", () => {
         option.textContent = turma;
         select.appendChild(option);
       });
-  
       container.appendChild(document.createTextNode("Turma do Aluno:"));
       container.appendChild(select);
     }
-  
-    if (tipo === "professor") {
-      const disciplinas = [
-        "Português", "Matemática", "História", "Geografia", "Ciências",
-        "Filosofia", "Artes", "Física", "Química"
-      ];
-  
+    if (tipo === "professor") {const disciplinas = ["Português", "Matemática", "História", "Geografia", "Ciências","Filosofia", "Artes", "Física", "Química"];
       container.appendChild(document.createTextNode("Disciplinas que leciona:"));
-  
       disciplinas.forEach(disc => {
         const label = document.createElement("label");
         label.style.display = "block";
-  
         const checkbox = document.createElement("input");
         checkbox.type = "checkbox";
         checkbox.value = disc;
         checkbox.className = "disciplinas-professor";
-  
         label.appendChild(checkbox);
         label.appendChild(document.createTextNode(" " + disc));
         container.appendChild(label);
@@ -462,10 +417,8 @@ document.addEventListener("DOMContentLoaded", () => {
   function mostrarMaterialProfessor() {
     const usuario = document.getElementById("login").value.trim().toLowerCase();
     const prof = usuarios[usuario];
-  
     if (prof && prof.tipo === "professor") {
       let disciplinas = [];
-  
       if (Array.isArray(prof.disciplinas)) {disciplinas = prof.disciplinas}
       else if (typeof prof.disciplinas === "string") {disciplinas = [prof.disciplinas]} 
       else if (typeof prof.disciplina === "string") {disciplinas = [prof.disciplina]}
@@ -474,14 +427,12 @@ document.addEventListener("DOMContentLoaded", () => {
         return;
       }
       carregarDisciplinasParaProfessor(disciplinas);} 
-    
       else {alert("Usuário atual não é um professor válido.");}
   }
   
   function carregarDisciplinasParaProfessor(disciplinas) {
     const select = document.getElementById("disciplina-prof");
     select.innerHTML = "<option value=''>-- Escolha --</option>";
-  
     disciplinas.forEach(disc => {
       const valor = disc.toLowerCase();
       const option = document.createElement("option");
@@ -503,32 +454,22 @@ function mostrarRespostaSalva(tipoUsuario, destino) {
   const chave = `mensagem_${tipoUsuario}_${destino}`;
   const dados = JSON.parse(localStorage.getItem(chave));
   const respostaDiv = document.getElementById(`resposta-${tipoUsuario}`);
-
-  if (dados && dados.resposta) {
-    respostaDiv.innerHTML += `
-      <p><strong>Resposta de ${destino}:</strong> ${dados.resposta}</p>
-    `;
-  }
+  if (dados && dados.resposta) {respostaDiv.innerHTML += `<p><strong>Resposta de ${destino}:</strong> ${dados.resposta}</p>`;}
 }
 
   function enviarMensagemSuporte(tipoUsuario) {
   const tipoSelect = document.getElementById(`tipo-mensagem-${tipoUsuario}`);
   const mensagemInput = document.getElementById(`mensagem-${tipoUsuario}`);
   const respostaDiv = document.getElementById(`resposta-${tipoUsuario}`);
-
   const tipo = tipoSelect.value;
   const texto = mensagemInput.value.trim();
-
   if (!tipo || !texto) {
     alert("Por favor, selecione o tipo e escreva uma mensagem.");
     return;
-  }
-
+  };
   const destino = tipo === "ajuda" ? "suporte" : "secretaria";
   const chave = `mensagens_${tipoUsuario}_${destino}`;
-
   const historico = JSON.parse(localStorage.getItem(chave)) || [];
-
   const novaMensagem = {
     de: tipoUsuario,
     para: destino,
@@ -536,12 +477,9 @@ function mostrarRespostaSalva(tipoUsuario, destino) {
     data: new Date().toLocaleString(),
     resposta: null
   };
-
   historico.push(novaMensagem);
   localStorage.setItem(chave, JSON.stringify(historico));
-
   respostaDiv.innerHTML = `<p id="mensagem-sucesso-${tipoUsuario}" style="color: green;">Mensagem enviada para ${destino}.</p>`;
-
   setTimeout(() => {
     const msg = document.getElementById(`mensagem-sucesso-${tipoUsuario}`);
     if (msg) msg.remove();
@@ -554,47 +492,31 @@ function mostrarRespostaSalva(tipoUsuario, destino) {
 function mostrarRequisicoesSuporte() {
   const container = document.getElementById("painel-ajuda-suporte");
   container.innerHTML = "";
-
   const mensagens = [];
-
   Object.keys(localStorage).forEach(chave => {
     if (chave.startsWith("mensagens_") && chave.endsWith("_suporte")) {
       const partes = chave.split("_");
       const remetente = partes[1];
       const lista = JSON.parse(localStorage.getItem(chave) || "[]");
-
-      lista.forEach((msg, i) => {
-        mensagens.push({ remetente, msg, chave, index: i });
-      });
+      lista.forEach((msg, i) => {mensagens.push({ remetente, msg, chave, index: i });});
     }
   });
-
   if (mensagens.length === 0) {
     container.innerHTML = "<p><em>Nenhuma requisição registrada até o momento.</em></p>";
     return;
   }
-
   mensagens.forEach(({ remetente, msg, chave, index }) => {
     const div = document.createElement("div");
     div.style.border = "1px solid #ccc";
     div.style.marginBottom = "10px";
     div.style.padding = "10px";
-
-    div.innerHTML = `
-      <p><strong>De:</strong> ${remetente}</p>
-      <p><strong>Mensagem:</strong> ${msg.texto}</p>
-      <p><strong>Data:</strong> ${msg.data}</p>
-    `;
-
-    if (msg.resposta) {
-      div.innerHTML += `<p style="color:lightgreen;"><strong>Resposta:</strong> ${msg.resposta}</p>`;
-    } else {
-      div.innerHTML += `
-        <textarea id="resposta-${chave}-${index}" placeholder="Responder..." style="width:100%;margin-top:5px;"></textarea>
-        <button onclick="responderMensagem('${chave}', ${index})">Enviar resposta</button>
-      `;
+    div.innerHTML = `<p><strong>De:</strong> ${remetente}</p>
+                     <p><strong>Mensagem:</strong> ${msg.texto}</p>
+                     <p><strong>Data:</strong> ${msg.data}</p>`;
+    if (msg.resposta) {div.innerHTML += `<p style="color:lightgreen;"><strong>Resposta:</strong> ${msg.resposta}</p>`;}
+    else {div.innerHTML += `<textarea id="resposta-${chave}-${index}" placeholder="Responder..." style="width:100%;margin-top:5px;"></textarea>
+                            <button onclick="responderMensagem('${chave}', ${index})">Enviar resposta</button>`;
     }
-
     container.appendChild(div);
   });
 }
@@ -602,56 +524,38 @@ function mostrarRequisicoesSuporte() {
 function mostrarReclamacoesSecretaria() {
   const container = document.getElementById("painel-reclamacoes-secretaria");
   container.innerHTML = "";
-
   const mensagens = [];
-
   Object.keys(localStorage).forEach(chave => {
     if (chave.startsWith("mensagens_") && chave.endsWith("_secretaria")) {
       const partes = chave.split("_");
       const remetente = partes[1];
       const lista = JSON.parse(localStorage.getItem(chave) || "[]");
-
       lista.forEach((msg, i) => {
-        mensagens.push({ remetente, msg, chave, index: i });
-      });
+        mensagens.push({ remetente, msg, chave, index: i })});
     }
   });
-
   if (mensagens.length === 0) {
     container.innerHTML = "<p><em>Nenhuma reclamação registrada ainda.</em></p>";
     return;
   }
-
   mensagens.forEach(({ remetente, msg, chave, index }) => {
     const div = document.createElement("div");
     div.style.border = "1px solid #ccc";
     div.style.marginBottom = "10px";
     div.style.padding = "10px";
-
-    div.innerHTML = `
-      <p><strong>De:</strong> ${remetente}</p>
-      <p><strong>Mensagem:</strong> ${msg.texto}</p>
-      <p><strong>Data:</strong> ${msg.data}</p>
-    `;
-
-    if (msg.resposta) {
-      div.innerHTML += `<p style="color:lightgreen;"><strong>Resposta:</strong> ${msg.resposta}</p>`;
-    } else {
-      div.innerHTML += `
-        <textarea id="resposta-${chave}-${index}" placeholder="Responder..." style="width:100%;margin-top:5px;"></textarea>
-        <button onclick="responderMensagem('${chave}', ${index})">Enviar resposta</button>
-      `;
-    }
-
+    div.innerHTML = `<p><strong>De:</strong> ${remetente}</p>
+                     <p><strong>Mensagem:</strong> ${msg.texto}</p>
+                     <p><strong>Data:</strong> ${msg.data}</p>`;
+    if (msg.resposta) {div.innerHTML += `<p style="color:lightgreen;"><strong>Resposta:</strong> ${msg.resposta}</p>`}
+    else {div.innerHTML += `<textarea id="resposta-${chave}-${index}" placeholder="Responder..." style="width:100%;margin-top:5px;"></textarea>
+                            <button onclick="responderMensagem('${chave}', ${index})">Enviar resposta</button>`}
     container.appendChild(div);
   });
 }
 
-
 function enviarReclamacaoSuporte() {
   const texto = document.getElementById("mensagem-reclamacao-suporte").value.trim();
   if (!texto) return alert("Digite a reclamação.");
-
   const dados = { de: "suporte", para: "secretaria", texto, resposta: null };
   localStorage.setItem("mensagem_suporte_secretaria", JSON.stringify(dados));
   document.getElementById("confirmacao-reclamacao-suporte").innerHTML = "<p style='color:lightgreen'>Reclamação enviada à Secretaria.</p>";
@@ -661,7 +565,6 @@ function enviarReclamacaoSuporte() {
 function enviarAjudaSecretaria() {
   const texto = document.getElementById("mensagem-ajuda-secretaria").value.trim();
   if (!texto) return alert("Digite a mensagem.");
-
   const dados = { de: "secretaria", para: "suporte", texto, resposta: null };
   localStorage.setItem("mensagem_secretaria_suporte", JSON.stringify(dados));
   document.getElementById("confirmacao-ajuda-secretaria").innerHTML = "<p style='color:lightgreen'>Mensagem enviada ao Suporte.</p>";
@@ -672,19 +575,16 @@ function responderMensagem(chave, index) {
   const textarea = document.getElementById(`resposta-${chave}-${index}`);
   const resposta = textarea.value.trim();
   if (!resposta) return alert("Digite a resposta.");
-
   const mensagens = JSON.parse(localStorage.getItem(chave) || "[]");
   if (mensagens[index].resposta) {
     alert("Esta mensagem já foi respondida.");
     return;
   }
-
   mensagens[index].resposta = resposta;
   localStorage.setItem(chave, JSON.stringify(mensagens));
   alert("Resposta enviada.");
   textarea.parentElement.querySelector("button").remove();
   textarea.remove();
-
   const respostaVisual = document.createElement("p");
   respostaVisual.style.color = "lightgreen";
   respostaVisual.innerHTML = `<strong>Resposta:</strong> ${resposta}`;
@@ -694,15 +594,12 @@ function responderMensagem(chave, index) {
 function mostrarHistoricoMensagens(tipoUsuario, destino) {
   const container = document.getElementById(`resposta-${tipoUsuario}`);
   container.innerHTML = "";
-
   const chave = `mensagens_${tipoUsuario}_${destino}`;
   const mensagens = JSON.parse(localStorage.getItem(chave) || "[]");
-
   if (mensagens.length === 0) {
-    container.innerHTML = `<p style="color: gray;"><em>Nenhuma solicitação registrada ainda.</em></p>`;
+    container.innerHTML = `<p style="color: lightgray;"><em>Nenhuma solicitação registrada ainda.</em></p>`;
     return;
   }
-
   mensagens.forEach((msg) => {
     const bloco = document.createElement("div");
     bloco.style.border = "1px solid #ccc";
@@ -711,12 +608,7 @@ function mostrarHistoricoMensagens(tipoUsuario, destino) {
     bloco.innerHTML = `
       <p><strong>Enviado em:</strong> ${msg.data}</p>
       <p><strong>Mensagem:</strong> ${msg.texto}</p>
-      ${
-        msg.resposta
-          ? `<p style="color:lightgreen"><strong>Resposta:</strong> ${msg.resposta}</p>`
-          : "<p style='color:gray'><em>Aguardando resposta</em></p>"
-      }
-    `;
+      ${msg.resposta ? `<p style="color:lightgreen"><strong>Resposta:</strong> ${msg.resposta}</p>` : "<p style='color:lightgray'><em>Aguardando resposta</em></p>"}`;
     container.appendChild(bloco);
   });
 }
@@ -724,59 +616,46 @@ function mostrarHistoricoMensagens(tipoUsuario, destino) {
 function mostrarHistoricoUsuario(tipoUsuario) {
   const container = document.getElementById(`resposta-${tipoUsuario}`);
   container.innerHTML = "";
-
   const chaveReq = `mensagens_${tipoUsuario}_suporte`;
   const requisicoes = JSON.parse(localStorage.getItem(chaveReq) || "[]");
-
   const blocoReq = document.createElement("div");
   blocoReq.innerHTML = `<h3>Histórico de Requisições</h3>`;
-
   if (requisicoes.length === 0) {
     const vazio = document.createElement("p");
-    vazio.style.color = "gray";
+    vazio.style.color = "lightgray";
     vazio.innerHTML = "<em>Nenhuma solicitação registrada ainda.</em>";
     blocoReq.appendChild(vazio);
-  } else {
+  } 
+  else {
     requisicoes.forEach(msg => {
       const div = document.createElement("div");
       div.className = "bloco-mensagem";
-      div.innerHTML = `
-        <p><strong>Data:</strong> ${msg.data}</p>
-        <p><strong>Mensagem:</strong> ${msg.texto}</p>
-        ${msg.resposta
-          ? `<p style="color:lightgreen;"><strong>Resposta:</strong> ${msg.resposta}</p>`
-          : `<p><em>Aguardando resposta</em></p>`}
-      `;
+      div.innerHTML = `<p><strong>Data:</strong> ${msg.data}</p>
+                       <p><strong>Mensagem:</strong> ${msg.texto}</p>
+                       ${msg.resposta ? `<p style="color:lightgreen;"><strong>Resposta:</strong> ${msg.resposta}</p>` : `<p><em>Aguardando resposta</em></p>`}`;
       blocoReq.appendChild(div);
     });
   }
-
   const chaveRec = `mensagens_${tipoUsuario}_secretaria`;
   const reclamacoes = JSON.parse(localStorage.getItem(chaveRec) || "[]");
-
   const blocoRec = document.createElement("div");
   blocoRec.innerHTML = `<h3>Histórico de Reclamações</h3>`;
-
   if (reclamacoes.length === 0) {
     const vazio = document.createElement("p");
     vazio.style.color = "lightgray";
     vazio.innerHTML = "<em>Nenhuma reclamação registrada ainda.</em>";
     blocoRec.appendChild(vazio);
-  } else {
+  }
+  else {
     reclamacoes.forEach(msg => {
       const div = document.createElement("div");
       div.className = "bloco-mensagem";
-      div.innerHTML = `
-        <p><strong>Data:</strong> ${msg.data}</p>
-        <p><strong>Mensagem:</strong> ${msg.texto}</p>
-        ${msg.resposta
-          ? `<p style="color:lightgreen;"><strong>Resposta:</strong> ${msg.resposta}</p>`
-          : `<p><em>Aguardando resposta</em></p>`}
-      `;
+      div.innerHTML = `<p><strong>Data:</strong> ${msg.data}</p>
+                       <p><strong>Mensagem:</strong> ${msg.texto}</p>
+                      ${msg.resposta ? `<p style="color:lightgreen;"><strong>Resposta:</strong> ${msg.resposta}</p>` : `<p><em>Aguardando resposta</em></p>`}`;
       blocoRec.appendChild(div);
     });
   }
-
   container.appendChild(blocoReq);
   container.appendChild(blocoRec);
 }
