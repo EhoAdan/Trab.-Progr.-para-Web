@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+
 <html lang="pt-br">
 <head>
   <meta charset="UTF-8" />
@@ -8,6 +9,7 @@
   <script>localStorage.setItem("tema", "escuro")</script>
 </head>
 <body>
+
     <div id="barra-topo">
         <select id="seletor-tema" onchange="mudarTemaPorSelecao(this)">
           <option value="claro">Tema Claro</option>
@@ -15,7 +17,7 @@
         </select>
         <button id="btn-logout" onclick="logout()">Sair</button>
       </div>
-      
+
         <div id="logout-container">
           <button id="btn-logout" onclick="logout()">Sair</button>
         </div>
@@ -25,19 +27,19 @@
     <h1 class="bem-vindo">Bem-vindo ao sistema escolar!</h1>
     <h2>Login:</h2>
     <input type="text" id="login" placeholder="Digite seu login" />
-
     <h2>Senha:</h2>
+
     <div class="senha-container">
       <input type="password" id="senha" placeholder="Digite sua senha" />
       <button type="button" id="btn-ver-senha"></button>
     </div>
 
     <button type="submit" onclick="fazerLogin()">Entrar</button>
-
     <div class="login-actions">
       <p onclick="mostrarRedefinirSenha()">Esqueci a senha</p>
       <p onclick="mostrarCriarUsuario()">Criar usuário</p>
     </div>
+
   </section>
 
   <section id="area-aluno">
@@ -74,27 +76,21 @@
 
   <div id="aluno-funcionalidade-suporte" class="funcionalidade">
   <h2>Suporte</h2>
-
   <label for="tipo-mensagem-aluno">Tipo de solicitação:</label>
   <select id="tipo-mensagem-aluno">
     <option value="">-- Selecione --</option>
     <option value="ajuda">Ajuda</option>
     <option value="reclamacao">Reclamação</option>
   </select>
-
   <textarea id="mensagem-aluno" placeholder="Digite sua mensagem..." rows="5" style="width: 100%; margin-top: 10px;"></textarea>
-
   <button onclick="enviarMensagemSuporte('aluno')">Enviar</button>
-
   <div id="resposta-aluno" style="margin-top: 15px;"></div>
-
   <button onclick="fecharFuncionalidade('aluno')">Voltar</button>
 </div>
 </section>
 
   <section id="area-professor">
   <h1>Área do Professor</h1>
-
   <div id="professor-menu">
     <button onclick="abrirFuncionalidade('professor', 'frequencia');mostrarFrequencia()">Frequência</button>
     <button onclick="abrirFuncionalidade('professor', 'historico');mostrarHistoricoFrequencia()">Ver Histórico de Frequência</button>
@@ -111,7 +107,6 @@
     <button onclick="salvarFrequencia()" class="botao-salvar">Salvar Frequência</button>
     <button onclick="fecharFuncionalidade('professor')">Voltar</button>
   </div>
-
   <div id="professor-funcionalidade-historico" class="funcionalidade">
   <h2>Histórico de Frequência</h2>
   <div id="historico-frequencia-container"></div>
@@ -136,20 +131,15 @@
 
   <div id="professor-funcionalidade-suporte" class="funcionalidade">
   <h2>Suporte</h2>
-
   <label for="tipo-mensagem-professor">Tipo de solicitação:</label>
   <select id="tipo-mensagem-professor">
     <option value="">-- Selecione --</option>
     <option value="ajuda">Ajuda</option>
     <option value="reclamacao">Reclamação</option>
   </select>
-
   <textarea id="mensagem-professor" placeholder="Digite sua mensagem..." rows="5" style="width: 100%; margin-top: 10px;"></textarea>
-
   <button onclick="enviarMensagemSuporte('professor')">Enviar</button>
-
   <div id="resposta-professor" style="margin-top: 15px;"></div>
-
   <button onclick="fecharFuncionalidade('professor')">Voltar</button>
 </div>
 </section>
@@ -163,28 +153,21 @@
 
   <div id="funcionario-funcionalidade-suporte" class="funcionalidade">
   <h2>Suporte</h2>
-
   <label for="tipo-mensagem-funcionario">Tipo de solicitação:</label>
   <select id="tipo-mensagem-funcionario">
     <option value="">-- Selecione --</option>
     <option value="ajuda">Ajuda</option>
     <option value="reclamacao">Reclamação</option>
   </select>
-
   <textarea id="mensagem-funcionario" placeholder="Digite sua mensagem..." rows="5" style="width: 100%; margin-top: 10px;"></textarea>
-
   <button onclick="enviarMensagemSuporte('funcionario')">Enviar</button>
-
   <div id="resposta-funcionario" style="margin-top: 15px;"></div>
-
   <button onclick="fecharFuncionalidade('funcionario')">Voltar</button>
 </div>
-
 </section>
 
   <section id="area-secretaria">
   <h1>Área da Secretaria</h1>
-
   <div id="secretaria-menu">
   <button onclick="abrirFuncionalidade('secretaria', 'usuarios')">Usuários</button>
   <button onclick="abrirFuncionalidade('secretaria', 'reclamacoes-recebidas');mostrarReclamacoesSecretaria()">Reclamações Recebidas</button>
@@ -204,7 +187,6 @@
   <div id="confirmacao-ajuda-secretaria" style="margin-top: 10px;"></div>
   <button onclick="fecharFuncionalidade('secretaria')">Voltar</button>
 </div>
-
 
   <div id="secretaria-funcionalidade-usuarios" class="funcionalidade">
     <h2>Usuários</h2>
@@ -234,14 +216,12 @@
   <div id="confirmacao-reclamacao-suporte" style="margin-top: 10px;"></div>
   <button onclick="fecharFuncionalidade('suporte')">Voltar</button>
 </div>
-
 </section>
 
   <section id="criar-usuario-section">
     <h2>Criar novo usuário</h2>
     <input type="text" id="novo-usuario" placeholder="Novo login" />
     <input type="password" id="nova-senha" placeholder="Nova senha" />
-
     <select id="tipo-usuario" onchange="atualizarCamposExtras()">
     <option value="">Selecione o tipo</option>
     <option value="aluno">Aluno</option>
@@ -263,5 +243,6 @@
   </section>
 
   <script src="script.js"></script>
+
 </body>
 </html>
