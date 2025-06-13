@@ -1,5 +1,4 @@
 <!DOCTYPE html>
-
 <html lang="pt-br">
 <head>
   <meta charset="UTF-8" />
@@ -114,8 +113,21 @@
 </div>
 
   <div id="professor-funcionalidade-boletim" class="funcionalidade">
-    <h2>Boletim</h2>
-    <p>Conteúdo do boletim do professor.</p>
+  <h2>Lançar Notas</h2>
+  <label for="serie-boletim">Série (Turma):</label>
+  <select id="serie-boletim" onchange="preencherAlunosDaSerie()"></select>
+  <label for="aluno-boletim">Aluno:</label>
+  <select id="aluno-boletim" onchange="carregarNotasSalvasProfessor()"></select>
+  <label for="disciplina-boletim">Disciplina:</label>
+  <select id="disciplina-boletim" onchange="carregarNotasSalvasProfessor()"></select>
+  <label for="nota-prova1">Nota - Prova 1:</label>
+  <input type="number" id="nota-prova1" min="0" max="10" step="0.1" />
+  <label for="nota-prova2">Nota - Prova 2:</label>
+  <input type="number" id="nota-prova2" min="0" max="10" step="0.1" />
+  <label for="nota-trabalho">Nota - Trabalho:</label>
+  <input type="number" id="nota-trabalho" min="0" max="10" step="0.1" />
+  <p id="media-professor"><strong>Média:</strong> Disponível após preencher todas as notas</p>
+  <button onclick="salvarNotasMultipla()">Salvar Nota</button>
     <button onclick="fecharFuncionalidade('professor')">Voltar</button>
   </div>
 
@@ -243,6 +255,5 @@
   </section>
 
   <script src="script.js"></script>
-
 </body>
 </html>
