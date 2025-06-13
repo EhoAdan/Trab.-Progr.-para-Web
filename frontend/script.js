@@ -68,9 +68,28 @@ document.addEventListener("DOMContentLoaded", () => {
       if (tipo === "aluno") {
         document.getElementById("area-aluno").style.display = "block";
         const turmaAluno = usuarios[usuario].turma || "";
-        carregarDisciplinasParaAluno(turmaAluno || "")
-      }
-      else if (tipo === "professor") document.getElementById("area-professor").style.display = "block";
+        carregarDisciplinasParaAluno(turmaAluno || "");
+        mostrarBoletimAluno(usuario); // ✅ exibe o boletim
+    }
+
+      else if (tipo === "professor") {document.getElementById("area-professor").style.display = "block";
+        const prof = usuarios[usuario];
+        const selectDisciplinas = document.getElementById("disciplina-boletim");
+        selectDisciplinas.innerHTML = "<option value=''>-- Selecione --</option>";
+        (prof.disciplinas || []).forEach(disc => {
+          const opt = document.createElement("option");
+          opt.value = disc.toLowerCase();
+          opt.textContent = disc;
+          selectDisciplinas.appendChild(opt);
+        });
+        const selectSerie = document.getElementById("serie-boletim");
+        selectSerie.innerHTML = "<option value=''>-- Selecione --</option>";
+        Object.keys(turmas).forEach(serie => {
+          const opt = document.createElement("option");
+          opt.value = serie;
+          opt.textContent = serie;
+          selectSerie.appendChild(opt);
+        })}
       else if (tipo === "funcionario") document.getElementById("area-funcionario").style.display = "block";
       else if (tipo === "secretaria") document.getElementById("area-secretaria").style.display = "block";
       else if (tipo === "suporte") document.getElementById("area-suporte").style.display = "block";
@@ -130,25 +149,25 @@ document.addEventListener("DOMContentLoaded", () => {
       alert("Preencha todos os campos.");
       return;
     }
-  
     if (usuariosFixos[nome]) {
       alert("Esse nome de usuário é reservado e não pode ser usado.");
       return;
     }
-  
     if (usuarios[nome]) {
       alert("Usuário já existe.");
       return;
     }
-  
     if (tipo === "aluno") {
-    const turma = document.getElementById("turma-aluno")?.value;
-    if (!turma) {
-      alert("Selecione a turma do aluno.");
-      return;
-    }
-    usuarios[nome] = { senha, tipo, turma };
+  const turma = document.getElementById("turma-aluno")?.value;
+  if (!turma) {
+    alert("Selecione a turma do aluno.");
+    return;
   }
+  usuarios[nome] = { senha, tipo, turma };
+  adicionarAlunoNaTurma(nome, turma);
+  inicializarBoletimAluno(nome);
+}
+
   
   else if (tipo === "professor") {
     const selecionadas = Array.from(document.querySelectorAll(".disciplinas-professor:checked")).map(el => el.value);
@@ -248,6 +267,16 @@ document.addEventListener("DOMContentLoaded", () => {
     "3ª série": ["romario"],
   
   };
+
+  function adicionarAlunoNaTurma(nomeAluno, nomeTurma) {
+  const chave = `alunos_${nomeTurma}`;
+  const lista = JSON.parse(localStorage.getItem(chave)) || [];
+  if (!lista.includes(nomeAluno)) {
+    lista.push(nomeAluno);
+    localStorage.setItem(chave, JSON.stringify(lista));
+  }
+}
+
   
   const professoresPorSerie = {"telaprofessor": ["1º ano","2º ano","3º ano", "4ª ano", "5º ano", "6º ano", "7º ano", "8º ano", "9º ano", "1ª série", "2ª série", "3ª série"]};
   
@@ -658,4 +687,154 @@ function mostrarHistoricoUsuario(tipoUsuario) {
   }
   container.appendChild(blocoReq);
   container.appendChild(blocoRec);
+}
+
+function preencherAlunosDaSerie() {
+  const serie = document.getElementById("serie-boletim").value;
+  const select = document.getElementById("aluno-boletim");
+  select.innerHTML = "<option value=''>-- Selecione --</option>";
+  const lista = turmas[serie] || [];
+  lista.forEach(nome => {
+    const opt = document.createElement("option");
+    opt.value = nome;
+    opt.textContent = nome;
+    select.appendChild(opt);
+  });
+}
+function salvarNota() {
+  const serie = document.getElementById("serie-boletim").value;
+  const aluno = document.getElementById("aluno-boletim").value;
+  const disciplina = document.getElementById("disciplina-boletim").value;
+  const tipoNota = document.getElementById("tipo-nota").value;
+  const valor = document.getElementById("nota").value;
+  if (!serie || !aluno || !disciplina || !tipoNota || valor === "") {
+    alert("Preencha todos os campos.");
+    return;
+  }
+  const chave = `boletim_${aluno}_${disciplina}`;
+  const boletim = JSON.parse(localStorage.getItem(chave)) || {prova1: "Ainda sem notas", prova2: "Ainda sem notas",trabalho: "Ainda sem notas"};
+  boletim[tipoNota] = valor;
+  localStorage.setItem(chave, JSON.stringify(boletim));
+  alert("Nota salva com sucesso!");
+  document.getElementById("nota").value = "";
+}
+
+function inicializarBoletimAluno(nome) {
+  const turma = usuarios[nome]?.turma || "";
+  const turmasComFisicaQuimica = ["9º ano", "1ª série", "2ª série", "3ª série"];
+  const disciplinasBase = ["matematica", "portugues", "historia", "geografia", "ciencias", "filosofia", "artes"];
+  const disciplinasAvancadas = ["fisica", "quimica"];
+  const incluirAvancadas = turmasComFisicaQuimica.includes(turma.toLowerCase());
+  const disciplinas = incluirAvancadas ? disciplinasBase.concat(disciplinasAvancadas) : disciplinasBase;
+  disciplinas.forEach(disciplina => {
+    const chave = `boletim_${nome}_${disciplina}`;
+    const boletim = {prova1: "Ainda sem notas", prova2: "Ainda sem notas", trabalho: "Ainda sem notas"};
+    localStorage.setItem(chave, JSON.stringify(boletim));
+  });
+}
+
+function mostrarBoletimAluno(nome) {
+  const container = document.getElementById("aluno-funcionalidade-boletim");
+  container.innerHTML = "<h2>Boletim</h2>";
+  const turma = (usuarios[nome]?.turma || "").toLowerCase();
+  const disciplinasBase = ["matematica", "portugues", "historia", "geografia", "ciencias", "filosofia", "artes"];
+  const disciplinasAvancadas = ["fisica", "quimica"];
+  const turmasComFisicaQuimica = ["9º ano", "1ª série", "2ª série", "3ª série"];
+  const incluirAvancadas = turmasComFisicaQuimica.map(t => t.toLowerCase()).includes(turma);
+  const disciplinas = incluirAvancadas ? disciplinasBase.concat(disciplinasAvancadas) : disciplinasBase;
+  let totalMedias = [];
+  let todasNotasPreenchidas = true;
+  disciplinas.forEach(disciplina => {
+    const chave = `boletim_${nome}_${disciplina}`;
+    const dados = JSON.parse(localStorage.getItem(chave)) || {prova1: "Ainda sem notas", prova2: "Ainda sem notas", trabalho: "Ainda sem notas"};
+    const notas = [dados.prova1, dados.prova2, dados.trabalho];
+    const notasNumericas = notas.map(n => parseFloat(n)).filter(n => !isNaN(n));
+    let mediaTexto = "Média: Disponível após receber as 3 notas";
+    if (notasNumericas.length === 3) {
+      const media = ((notasNumericas[0] + notasNumericas[1] + notasNumericas[2]) / 3).toFixed(2);
+      mediaTexto = `Média: ${media}`;
+      totalMedias.push(parseFloat(media));
+    } 
+    else {todasNotasPreenchidas = false;}
+    const div = document.createElement("div");
+    div.className = "bloco-mensagem";
+    div.innerHTML = `<h3>${disciplina.toUpperCase()}</h3>
+                     <p><strong>Prova 1:</strong> ${dados.prova1}</p>
+                     <p><strong>Prova 2:</strong> ${dados.prova2}</p>
+                     <p><strong>Trabalho:</strong> ${dados.trabalho}</p>
+                     <p><strong>${mediaTexto}</strong></p>`;
+    container.appendChild(div);
+  });
+  const situacao = document.createElement("div");
+  situacao.className = "bloco-mensagem";
+  let statusFinal = "Em andamento";
+  if (totalMedias.length === disciplinas.length) {statusFinal = totalMedias.every(m => m >= 7) ? "Aprovado" : "Reprovado";}
+  situacao.innerHTML = `<h3>Situação Final: ${statusFinal}</h3>`;
+  container.appendChild(situacao);
+}
+
+function salvarNotasMultipla() {
+  const serie = document.getElementById("serie-boletim").value;
+  const aluno = document.getElementById("aluno-boletim").value;
+  const disciplina = document.getElementById("disciplina-boletim").value;
+  const nota1 = document.getElementById("nota-prova1").value;
+  const nota2 = document.getElementById("nota-prova2").value;
+  const notaT = document.getElementById("nota-trabalho").value;
+  if (!serie || !aluno || !disciplina) {
+    alert("Selecione a série, aluno e disciplina.");
+    return;
+  }
+  const chave = `boletim_${aluno}_${disciplina}`;
+  const boletim = JSON.parse(localStorage.getItem(chave)) || {prova1: "Ainda sem notas", prova2: "Ainda sem notas", trabalho: "Ainda sem notas"};
+  if (nota1 !== "") boletim.prova1 = nota1;
+  if (nota2 !== "") boletim.prova2 = nota2;
+  if (notaT !== "") boletim.trabalho = notaT;
+  localStorage.setItem(chave, JSON.stringify(boletim));
+  alert("Notas salvas com sucesso!");
+  document.getElementById("nota-prova1").value = "";
+  document.getElementById("nota-prova2").value = "";
+  document.getElementById("nota-trabalho").value = "";
+  atualizarMediaProfessor();
+}
+
+function atualizarMediaProfessor() {
+  const aluno = document.getElementById("aluno-boletim").value;
+  const disciplina = document.getElementById("disciplina-boletim").value;
+  const mediaDiv = document.getElementById("media-professor");
+  if (!aluno || !disciplina) {
+    mediaDiv.innerHTML = "<strong>Média:</strong> Disponível após preencher todas as notas";
+    return;
+  }
+  const chave = `boletim_${aluno}_${disciplina}`;
+  const boletim = JSON.parse(localStorage.getItem(chave));
+  if (!boletim) {
+    mediaDiv.innerHTML = "<strong>Média:</strong> Disponível após preencher todas as notas";
+    return;
+  }
+  const notas = [boletim.prova1, boletim.prova2, boletim.trabalho].map(n => parseFloat(n));
+  if (notas.some(isNaN)) {
+    mediaDiv.innerHTML = "<strong>Média:</strong> Disponível após preencher todas as notas";
+    return;
+  }
+  const media = ((notas[0] + notas[1] + notas[2]) / 3).toFixed(2);
+  mediaDiv.innerHTML = `<strong>Média:</strong> ${media}`;
+}
+
+function carregarNotasSalvasProfessor() {
+  const aluno = document.getElementById("aluno-boletim").value;
+  const disciplina = document.getElementById("disciplina-boletim").value;
+  const nota1 = document.getElementById("nota-prova1");
+  const nota2 = document.getElementById("nota-prova2");
+  const notaT = document.getElementById("nota-trabalho");
+  nota1.value = "";
+  nota2.value = "";
+  notaT.value = "";
+  if (!aluno || !disciplina) return;
+  const chave = `boletim_${aluno}_${disciplina}`;
+  const boletim = JSON.parse(localStorage.getItem(chave));
+  if (!boletim) return;
+  if (!isNaN(parseFloat(boletim.prova1))) nota1.value = boletim.prova1;
+  if (!isNaN(parseFloat(boletim.prova2))) nota2.value = boletim.prova2;
+  if (!isNaN(parseFloat(boletim.trabalho))) notaT.value = boletim.trabalho;
+  atualizarMediaProfessor();
 }
