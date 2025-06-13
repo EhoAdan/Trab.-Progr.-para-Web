@@ -123,7 +123,7 @@
   
   #material-didatico {
     margin-top: 20px;
-    background-color: #fff;
+    background-color: #4d4d4d;
     padding: 15px;
     border-radius: 8px;
     box-shadow: 0 0 10px rgba(0,0,0,0.1);
@@ -143,6 +143,12 @@
     background-color: #f1f1f1;
     border-radius: 5px;
   }
+
+  body.dark-mode .livro {
+  background-color: #2b2b2b;
+  color: #f0f0f0;
+  border: 1px solid #444;
+}
   
   #frequencia-container {
     display: none;
@@ -394,4 +400,18 @@ body.dark-mode {
 
 body.dark-mode #barra-topo {
   background-color: #000b18;
+}
+
+.bloco-mensagem {
+  background-color: #f9f9f9;
+  padding: 10px;
+  margin: 10px 0;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+}
+
+body.dark-mode .bloco-mensagem {
+  background-color: #2b2b2b;
+  border: 1px solid #555;
+  color: #f0f0f0;
 }
