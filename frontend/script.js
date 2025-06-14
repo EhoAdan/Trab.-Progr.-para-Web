@@ -69,7 +69,7 @@ document.addEventListener("DOMContentLoaded", () => {
         document.getElementById("area-aluno").style.display = "block";
         const turmaAluno = usuarios[usuario].turma || "";
         carregarDisciplinasParaAluno(turmaAluno || "");
-        mostrarBoletimAluno(usuario); // ✅ exibe o boletim
+        mostrarBoletimAluno(usuario);
     }
 
       else if (tipo === "professor") {document.getElementById("area-professor").style.display = "block";
@@ -771,6 +771,10 @@ function mostrarBoletimAluno(nome) {
   if (totalMedias.length === disciplinas.length) {statusFinal = totalMedias.every(m => m >= 7) ? "Aprovado" : "Reprovado";}
   situacao.innerHTML = `<h3>Situação Final: ${statusFinal}</h3>`;
   container.appendChild(situacao);
+  const btnVoltar = document.createElement("button");
+  btnVoltar.textContent = "Voltar";
+  btnVoltar.onclick = () => fecharFuncionalidade('aluno');
+  container.appendChild(btnVoltar);
 }
 
 function salvarNotasMultipla() {
