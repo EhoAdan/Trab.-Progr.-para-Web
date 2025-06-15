@@ -253,18 +253,18 @@ document.addEventListener("DOMContentLoaded", () => {
   }
   
   const turmas = {
-    "1º ano": ["ana", "mario", "carla"],
-    "2º ano": ["joao", "livia"],
-    "3º ano": ["felipe", "bruna"],
-    "4º ano": ["lucas"],
-    "5º ano": ["jose"],
-    "6º ano": ["marco"],
-    "7º ano": ["edenilson", "telaalunofund"],
-    "8º ano": ["roberto"],
-    "9º ano": ["carlos", "telaalunomed"],
-    "1ª série": ["florinda"],
-    "2ª série": ["edmundo"],
-    "3ª série": ["romario"],
+    "1º ano": [],
+    "2º ano": [],
+    "3º ano": [],
+    "4º ano": [],
+    "5º ano": [],
+    "6º ano": [],
+    "7º ano": ["telaalunofund"],
+    "8º ano": [],
+    "9º ano": ["telaalunomed"],
+    "1ª série": [],
+    "2ª série": [],
+    "3ª série": [],
   
   };
 
@@ -336,6 +336,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const conteudo = document.getElementById(`${area}-funcionalidade-${nome}`);
     if (conteudo) conteudo.style.display = "block";
     if (nome === "suporte" && ["aluno", "professor", "funcionario"].includes(area)) {mostrarHistoricoUsuario(area);}
+    if (area === "secretaria" && nome === "usuarios") {abrirGerenciamentoUsuarios();}
   }
   
   function fecharFuncionalidade(area) {
@@ -841,4 +842,40 @@ function carregarNotasSalvasProfessor() {
   if (!isNaN(parseFloat(boletim.prova2))) nota2.value = boletim.prova2;
   if (!isNaN(parseFloat(boletim.trabalho))) notaT.value = boletim.trabalho;
   atualizarMediaProfessor();
+}
+
+function abrirGerenciamentoUsuarios() {
+  const container = document.getElementById("lista-usuarios");
+  container.innerHTML = "";
+
+  Object.keys(usuarios).forEach(usuario => {
+    const dados = usuarios[usuario];
+    const div = document.createElement("div");
+    div.className = "bloco-mensagem";
+    div.innerHTML = `<strong>${usuario}</strong> (${dados.tipo})<br>
+                     <label>Senha: <input type="text" value="${dados.senha}" id="senha-${usuario}"></label><br>
+                     <button onclick="salvarEdicaoUsuario('${usuario}')">Salvar</button>
+                     ${usuariosFixos[usuario] ? "" : `<button onclick="removerUsuario('${usuario}')">Remover</button>`}`;
+    container.appendChild(div);
+  });
+}
+
+function salvarEdicaoUsuario(usuario) {
+  const novaSenha = document.getElementById(`senha-${usuario}`).value;
+  if (!novaSenha) return alert("Senha não pode estar vazia.");
+  usuarios[usuario].senha = novaSenha;
+  salvarUsuarios();
+  alert("Usuário atualizado.");
+}
+
+function removerUsuario(usuario) {
+  if (usuariosFixos[usuario]) {
+    alert("Este usuário não pode ser removido.");
+    return;
+  }
+  if (confirm(`Tem certeza que deseja remover o usuário "${usuario}"?`)) {
+    delete usuarios[usuario];
+    salvarUsuarios();
+    abrirGerenciamentoUsuarios();
+  }
 }
