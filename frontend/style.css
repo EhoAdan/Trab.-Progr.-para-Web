@@ -301,6 +301,7 @@
   }
 
   #seletor-tema {
+    margin-top: 15px;
     background-color: #444;
     color: white;
     appearance: none;
