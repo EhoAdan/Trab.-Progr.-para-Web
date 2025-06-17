@@ -1,11 +1,10 @@
-const { Client } = require('pg');
+import { Sequelize } from 'sequelize';
+import dotenv from 'dotenv';
+dotenv.config();
 
-const client = new Client({
-    host: 'localhost',
-    port: 5432,
-    user: 'root',
-    password: 'root',
-    database: 'school',
+const sequelize = new Sequelize(process.env.DB_URL, {
+  dialect: 'postgres',
+  logging: false,
 });
 
-client.connect();
+export default sequelize;
