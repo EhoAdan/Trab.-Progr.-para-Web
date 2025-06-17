@@ -1,7 +1,5 @@
 * {
     box-sizing: border-box;
-    margin: 0;
-    padding: 0;
     font-family: Arial, sans-serif;
   }
   
@@ -45,6 +43,7 @@
   #area-funcionario,
   #area-secretaria,
   #area-suporte {
+    justify-content: center;
     display: none;
   }
 
@@ -163,7 +162,12 @@
     margin-top: 10px;
   }
   
-  #professor-menu {
+  #professor-menu,
+  #aluno-menu,
+  #suporte-menu,
+  #funcionario-menu,
+  #secretaria-menu {
+    justify-content: center;
     display: flex;
     flex-direction: column; 
     gap: 10px;              
@@ -301,6 +305,7 @@
   }
 
   #seletor-tema {
+    margin-top: 15px;
     background-color: #444;
     color: white;
     appearance: none;
