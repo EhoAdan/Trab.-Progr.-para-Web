@@ -38,7 +38,7 @@ const authController = {
       const { senha: _, ...userSemSenha } = usuario.toJSON();
       res.status(201).json({ token, usuario: userSemSenha });
     } catch (err) {
-      console.error(err);
+      console.error("Erro ao registrar usuário2:", err);
       res.status(400).json({ error: 'Erro ao registrar usuário' });
     }
   },

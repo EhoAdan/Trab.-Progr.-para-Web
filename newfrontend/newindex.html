@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>Teste de Fetch Alunos</title>
+</head>
+<body>
+  <h1>Lista de Alunos</h1>
+  <ul id="lista-alunos"></ul>
+
+  <script>
+    const DB_URL = 'postgres://root:root@localhost:5432/school';
+
+    fetch(DB_URL)
+      .then(response => response.json())
+      .then(data => {
+        const lista = document.getElementById('lista-alunos');
+        data.forEach(aluno => {
+          const li = document.createElement('li');
+          li.textContent = `ID: ${aluno.id} - Nome: ${aluno.nome}`;
+          lista.appendChild(li);
+        });
+      })
+      .catch(error => console.error('Erro ao buscar alunos:', error));
+  </script>
+</body>
+</html>

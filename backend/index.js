@@ -9,11 +9,19 @@ import disciplinaRoutes from './routes/disciplinas.routes.js';
 import authMiddleware from './middleware/authMiddleware.js';
 import authRoutes from './routes/auth.routes.js';
 
+import cors from 'cors';
+
 dotenv.config();
+
 
 const SECRET = process.env.JWT_SECRET;
 const app = express();
 const port = process.env.PORT || 3000;
+
+app.use(cors({
+  origin: 'http://localhost:33151', // usei essa porta apenas para teste
+  credentials: true 
+}));
 
 app.use(express.json());
 app.use(cookieParser());

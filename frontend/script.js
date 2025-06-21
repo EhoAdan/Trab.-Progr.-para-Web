@@ -36,52 +36,61 @@ document.addEventListener("DOMContentLoaded", () => {
       });
     });
 
-  });const usuariosFixos = {
-    "telaalunofund": {senha: "0", tipo: "aluno", turma: "7º ano" },
-    "telaalunomed": { senha: "1", tipo: "aluno", turma: "9º ano" },
-    "telaprofessor": { senha: "2", tipo: "professor", disciplinas: ["historia", "geografia", "fisica"]},
-    "telafuncionario": { senha: "3", tipo: "funcionario" },
-    "telasecretaria": { senha: "4", tipo: "secretaria" },
-    "suporte": { senha: "suporte12", tipo: "suporte" }
-  };
+  });
 
-  let usuarios = {
-    ...usuariosFixos,
-    ...JSON.parse(localStorage.getItem("usuarios") || "{}")
-  };
-  
-  function salvarUsuarios() {localStorage.setItem("usuarios", JSON.stringify(usuarios));}
-  salvarUsuarios();
   function fecharTodasFuncionalidades() {
     const todas = document.querySelectorAll(".funcionalidade");
     todas.forEach(div => div.style.display = "none");
     const todosMenus = document.querySelectorAll("#aluno-menu, #professor-menu, #funcionario-menu, #secretaria-menu, #suporte-menu");
     todosMenus.forEach(menu => menu.style.display = "block");}
 
-  function fazerLogin() {
-    const usuario = document.getElementById('login').value.trim().toLowerCase();
+  async function fazerLogin() {
+    const email = document.getElementById('login').value.trim().toLowerCase();
     const senha = document.getElementById('senha').value;
-    esconderTodasAreas();
-  
-    if (usuarios[usuario] && usuarios[usuario].senha === senha) {
-      const tipo = usuarios[usuario].tipo;
+
+    try {
+      const res = await fetch("http://localhost:3000/auth/login", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ email, senha }),
+      });
+
+      const data = await res.json();
+
+      if (!res.ok) {
+        alert(data.error || "Erro ao fazer login");
+        return;
+      }
+
+      const {token, usuario} = data;
+      localStorage.setItem("token", token);
+      localStorage.setItem("usuario", JSON.stringify(usuario))
+
+
+
+      document.getElementById("login-section").style.display = "none";
+      document.getElementById("btn-logout").style.display = "block";
+
+      esconderTodasAreas();
+      const tipo = usuario.atribuicao;
+
       if (tipo === "aluno") {
         document.getElementById("area-aluno").style.display = "block";
-        const turmaAluno = usuarios[usuario].turma || "";
-        carregarDisciplinasParaAluno(turmaAluno || "");
-        mostrarBoletimAluno(usuario);
-    }
-
-      else if (tipo === "professor") {document.getElementById("area-professor").style.display = "block";
-        const prof = usuarios[usuario];
+        carregarDisciplinasParaAluno(usuario.turma || "");
+        mostrarBoletimAluno(usuario.email);
+      } else if (tipo === "professor") {
+        document.getElementById("area-professor").style.display = "block";
         const selectDisciplinas = document.getElementById("disciplina-boletim");
         selectDisciplinas.innerHTML = "<option value=''>-- Selecione --</option>";
-        (prof.disciplinas || []).forEach(disc => {
+        (usuario.disciplinas || []).forEach(disc => {
           const opt = document.createElement("option");
           opt.value = disc.toLowerCase();
           opt.textContent = disc;
           selectDisciplinas.appendChild(opt);
         });
+
         const selectSerie = document.getElementById("serie-boletim");
         selectSerie.innerHTML = "<option value=''>-- Selecione --</option>";
         Object.keys(turmas).forEach(serie => {
@@ -89,16 +98,27 @@ document.addEventListener("DOMContentLoaded", () => {
           opt.value = serie;
           opt.textContent = serie;
           selectSerie.appendChild(opt);
-        })}
-      else if (tipo === "funcionario") document.getElementById("area-funcionario").style.display = "block";
-      else if (tipo === "secretaria") document.getElementById("area-secretaria").style.display = "block";
-      else if (tipo === "suporte") document.getElementById("area-suporte").style.display = "block";
-      document.getElementById("login-section").style.display = "none";
-      document.getElementById("btn-logout").style.display = "block"}
-       else {alert("Usuário ou senha incorretos.")}
+        });
+      } else if (tipo === "funcionario") {
+        document.getElementById("area-funcionario").style.display = "block";
+      } else if (tipo === "secretaria") {
+        document.getElementById("area-secretaria").style.display = "block";
+      } else if (tipo === "suporte") {
+        document.getElementById("area-suporte").style.display = "block";
+      }
+
+    
+    } catch (err) {
+      console.error(err);
+      alert("Erro de rede ou servidor offline");
+    }
   }
-  
+
   function logout() {
+
+    localStorage.removeItem("token");
+    localStorage.removeItem("usuario");
+
     esconderTodasAreas();
     fecharTodasFuncionalidades();
     document.getElementById("login-section").style.display = "block";
@@ -140,49 +160,37 @@ document.addEventListener("DOMContentLoaded", () => {
     document.getElementById("login-section").style.display = "block";
   }
   
-  function criarUsuario() {
+  async function criarUsuario() {
     const nome = document.getElementById("novo-usuario").value.trim().toLowerCase();
+    const email = document.getElementById("novo-email").value.trim().toLowerCase();
     const senha = document.getElementById("nova-senha").value;
-    const tipo = document.getElementById("tipo-usuario").value;
-  
-    if (!nome || !senha || !tipo) {
+    const atribuicao = document.getElementById("tipo-usuario").value;
+
+    if (!nome || !senha || !atribuicao) {
       alert("Preencha todos os campos.");
       return;
     }
-    if (usuariosFixos[nome]) {
-      alert("Esse nome de usuário é reservado e não pode ser usado.");
-      return;
-    }
-    if (usuarios[nome]) {
-      alert("Usuário já existe.");
-      return;
-    }
-    if (tipo === "aluno") {
-  const turma = document.getElementById("turma-aluno")?.value;
-  if (!turma) {
-    alert("Selecione a turma do aluno.");
-    return;
-  }
-  usuarios[nome] = { senha, tipo, turma };
-  adicionarAlunoNaTurma(nome, turma);
-  inicializarBoletimAluno(nome);
-}
+    try {
+    const res = await fetch("http://localhost:3000/auth/register", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ nome, email, senha, atribuicao })
+    });
 
-  
-  else if (tipo === "professor") {
-    const selecionadas = Array.from(document.querySelectorAll(".disciplinas-professor:checked")).map(el => el.value);
-    if (selecionadas.length === 0) {
-      alert("Selecione ao menos uma disciplina que o professor leciona.");
+    const data = await res.json();
+
+    if (!res.ok) {
+      alert(data.error || "Erro ao registrar");
       return;
     }
-    usuarios[nome] = { senha, tipo, disciplinas: selecionadas };
-  }
-  
-  else {usuarios[nome] = {senha, tipo}}
-    salvarUsuarios();
-    alert("Usuário criado com sucesso!");
+
+    alert("Usuário registrado com sucesso! Faça login.");
     voltarLogin();
+  } catch (err) {
+    console.error(err);
+    alert("Erro de rede ou servidor fora do ar.");
   }
+}
   
   function redefinirSenha() {
     const nome = document.getElementById("usuario-redefinir").value.trim().toLowerCase();
