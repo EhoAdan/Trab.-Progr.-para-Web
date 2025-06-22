@@ -15,7 +15,6 @@ const sequelize = new Sequelize(process.env.DB_URL, {
 const db = {};
 
 db.sequelize = sequelize;
-db.Sequelize = Sequelize;
 
 db.Aluno = AlunoModel(sequelize, DataTypes);
 db.Professor = ProfessorModel(sequelize, DataTypes);
