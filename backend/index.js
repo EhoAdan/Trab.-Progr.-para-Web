@@ -32,8 +32,16 @@ app.use(session({
   cookie: { secure: false } // use `true` apenas com HTTPS
 }));
 
+app.get('/', (req, res) => {
+  res.send('Conseguimos acessar o site');
+});
+
 app.get('/protegido', authMiddleware, (req, res) => {
   res.json({ message: `Olá, ${req.user.email}` });
+});
+
+app.get('/status', (req, res) => {
+  res.json({ status: 'ok', versao: '1.0.0' });
 });
 
 app.use('/auth', authRoutes);
