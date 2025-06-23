@@ -16,6 +16,7 @@ dotenv.config();
 
 const SECRET = process.env.JWT_SECRET;
 const app = express();
+app.use(express.static('frontend'));
 const port = process.env.PORT || 3000;
 
 app.use(cors({
