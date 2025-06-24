@@ -206,6 +206,8 @@ document.addEventListener("DOMContentLoaded", () => {
     alert("Senha redefinida com sucesso!");
     voltarLogin();
   }
+
+//USA BANCO DE DADOS AQUI
   
   const livrosDidaticos = {
     portugues: [
@@ -245,7 +247,9 @@ document.addEventListener("DOMContentLoaded", () => {
       {titulo: "Tabela Periódica", link: "#"}
     ]
   };
-  
+
+//USA BANCO DE DADOS AQUI
+
   function exibirLivros() {
     const disciplina = document.getElementById("disciplina").value;
     const container = document.getElementById("livros-container");
@@ -259,7 +263,9 @@ document.addEventListener("DOMContentLoaded", () => {
       });
     }
   }
-  
+
+//USA BANCO DE DADOS AQUI
+
   const turmas = {
     "1º ano": [],
     "2º ano": [],
@@ -276,6 +282,8 @@ document.addEventListener("DOMContentLoaded", () => {
   
   };
 
+//USA BANCO DE DADOS AQUI
+
   function adicionarAlunoNaTurma(nomeAluno, nomeTurma) {
   const chave = `alunos_${nomeTurma}`;
   const lista = JSON.parse(localStorage.getItem(chave)) || [];
@@ -285,9 +293,12 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 }
 
-  
+//USA BANCO DE DADOS AQUI
+
   const professoresPorSerie = {"telaprofessor": ["1º ano","2º ano","3º ano", "4ª ano", "5º ano", "6º ano", "7º ano", "8º ano", "9º ano", "1ª série", "2ª série", "3ª série"]};
-  
+
+//USA BANCO DE DADOS AQUI
+
   function mostrarFrequencia() {
     const turmaSelect = document.getElementById("turma-frequencia");
     turmaSelect.innerHTML = "<option value=''>-- Selecione --</option>";
@@ -302,7 +313,9 @@ document.addEventListener("DOMContentLoaded", () => {
     const container = document.getElementById("alunos-frequencia");
     if (container) container.innerHTML = "";
   }
-  
+
+//USA BANCO DE DADOS AQUI
+
   function carregarAlunosTurma() {
     const turma = document.getElementById("turma-frequencia").value;
     const alunos = turmas[turma] || [];
@@ -318,7 +331,9 @@ document.addEventListener("DOMContentLoaded", () => {
       container.appendChild(div);
     });
   }
-  
+
+//USA BANCO DE DADOS AQUI
+
   function salvarFrequencia() {
     const turma = document.getElementById("turma-frequencia").value;
     if (!turma) {
@@ -336,7 +351,9 @@ document.addEventListener("DOMContentLoaded", () => {
     localStorage.setItem(`frequencia_${turma}_${hoje}`, JSON.stringify(frequencia));
     alert("Frequência salva com sucesso!");
   }
-  
+
+
+
   function abrirFuncionalidade(area, nome) {
     fecharFuncionalidade(area);
     const menu = document.getElementById(`${area}-menu`);
@@ -346,14 +363,18 @@ document.addEventListener("DOMContentLoaded", () => {
     if (nome === "suporte" && ["aluno", "professor", "funcionario"].includes(area)) {mostrarHistoricoUsuario(area);}
     if (area === "secretaria" && nome === "usuarios") {abrirGerenciamentoUsuarios();}
   }
-  
+
+
+
   function fecharFuncionalidade(area) {
     const funcionalidades = document.querySelectorAll(`#area-${area} .funcionalidade`);
     funcionalidades.forEach(div => div.style.display = "none");
     const menu = document.getElementById(`${area}-menu`);
     if (menu) menu.style.display = "block";
   }
-  
+
+//USA BANCO DE DADOS AQUI
+
   function mostrarHistoricoFrequencia() {
     const container = document.getElementById("historico-frequencia-container");
     container.innerHTML = "";
@@ -384,7 +405,9 @@ document.addEventListener("DOMContentLoaded", () => {
       container.appendChild(bloco);
     });
   }
-  
+
+//USA BANCO DE DADOS AQUI
+
   function carregarDisciplinasParaAluno(turmaAluno) {
     const disciplinasBase = [
       { nome: "Português", valor: "portugues" },
@@ -417,7 +440,9 @@ document.addEventListener("DOMContentLoaded", () => {
       });
     }
   }
-  
+
+//USA BANCO DE DADOS AQUI
+
   function atualizarCamposExtras() {
     const tipo = document.getElementById("tipo-usuario").value;
     const container = document.getElementById("campos-extras");
@@ -452,6 +477,8 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   }
 
+//USA BANCO DE DADOS AQUI
+
   function mostrarMaterialProfessor() {
     const usuario = document.getElementById("login").value.trim().toLowerCase();
     const prof = usuarios[usuario];
@@ -467,7 +494,9 @@ document.addEventListener("DOMContentLoaded", () => {
       carregarDisciplinasParaProfessor(disciplinas);} 
       else {alert("Usuário atual não é um professor válido.");}
   }
-  
+
+//USA BANCO DE DADOS AQUI
+
   function carregarDisciplinasParaProfessor(disciplinas) {
     const select = document.getElementById("disciplina-prof");
     select.innerHTML = "<option value=''>-- Escolha --</option>";
@@ -481,12 +510,14 @@ document.addEventListener("DOMContentLoaded", () => {
     const container = document.getElementById("livros-container-prof");
     container.innerHTML = "";
   }
-
+//USA BANCO DE DADOS AQUI
   function mudarTemaPorSelecao(select) {
     const tema = select.value;
     document.body.classList.toggle("dark-mode", tema === "escuro");
     localStorage.setItem("tema", tema);
   }
+
+//USA BANCO DE DADOS AQUI
 
 function mostrarRespostaSalva(tipoUsuario, destino) {
   const chave = `mensagem_${tipoUsuario}_${destino}`;
@@ -494,6 +525,8 @@ function mostrarRespostaSalva(tipoUsuario, destino) {
   const respostaDiv = document.getElementById(`resposta-${tipoUsuario}`);
   if (dados && dados.resposta) {respostaDiv.innerHTML += `<p><strong>Resposta de ${destino}:</strong> ${dados.resposta}</p>`;}
 }
+
+//USA BANCO DE DADOS AQUI
 
   function enviarMensagemSuporte(tipoUsuario) {
   const tipoSelect = document.getElementById(`tipo-mensagem-${tipoUsuario}`);
@@ -527,6 +560,8 @@ function mostrarRespostaSalva(tipoUsuario, destino) {
   tipoSelect.value = "";
 }
 
+//USA BANCO DE DADOS AQUI
+
 function mostrarRequisicoesSuporte() {
   const container = document.getElementById("painel-ajuda-suporte");
   container.innerHTML = "";
@@ -558,6 +593,8 @@ function mostrarRequisicoesSuporte() {
     container.appendChild(div);
   });
 }
+
+//USA BANCO DE DADOS AQUI
 
 function mostrarReclamacoesSecretaria() {
   const container = document.getElementById("painel-reclamacoes-secretaria");
@@ -591,6 +628,8 @@ function mostrarReclamacoesSecretaria() {
   });
 }
 
+//USA BANCO DE DADOS AQUI
+
 function enviarReclamacaoSuporte() {
   const texto = document.getElementById("mensagem-reclamacao-suporte").value.trim();
   if (!texto) return alert("Digite a reclamação.");
@@ -600,6 +639,8 @@ function enviarReclamacaoSuporte() {
   document.getElementById("mensagem-reclamacao-suporte").value = "";
 }
 
+//USA BANCO DE DADOS AQUI
+
 function enviarAjudaSecretaria() {
   const texto = document.getElementById("mensagem-ajuda-secretaria").value.trim();
   if (!texto) return alert("Digite a mensagem.");
@@ -608,6 +649,8 @@ function enviarAjudaSecretaria() {
   document.getElementById("confirmacao-ajuda-secretaria").innerHTML = "<p style='color:lightgreen'>Mensagem enviada ao Suporte.</p>";
   document.getElementById("mensagem-ajuda-secretaria").value = "";
 }
+
+//USA BANCO DE DADOS AQUI
 
 function responderMensagem(chave, index) {
   const textarea = document.getElementById(`resposta-${chave}-${index}`);
@@ -628,6 +671,8 @@ function responderMensagem(chave, index) {
   respostaVisual.innerHTML = `<strong>Resposta:</strong> ${resposta}`;
   textarea.parentElement.appendChild(respostaVisual);
 }
+
+//USA BANCO DE DADOS AQUI
 
 function mostrarHistoricoMensagens(tipoUsuario, destino) {
   const container = document.getElementById(`resposta-${tipoUsuario}`);
@@ -650,6 +695,8 @@ function mostrarHistoricoMensagens(tipoUsuario, destino) {
     container.appendChild(bloco);
   });
 }
+
+//USA BANCO DE DADOS AQUI
 
 function mostrarHistoricoUsuario(tipoUsuario) {
   const container = document.getElementById(`resposta-${tipoUsuario}`);
@@ -698,6 +745,9 @@ function mostrarHistoricoUsuario(tipoUsuario) {
   container.appendChild(blocoRec);
 }
 
+
+//USA BANCO DE DADOS AQUI
+
 function preencherAlunosDaSerie() {
   const serie = document.getElementById("serie-boletim").value;
   const select = document.getElementById("aluno-boletim");
@@ -710,6 +760,9 @@ function preencherAlunosDaSerie() {
     select.appendChild(opt);
   });
 }
+
+//USA BANCO DE DADOS AQUI
+
 function salvarNota() {
   const serie = document.getElementById("serie-boletim").value;
   const aluno = document.getElementById("aluno-boletim").value;
@@ -728,6 +781,8 @@ function salvarNota() {
   document.getElementById("nota").value = "";
 }
 
+
+
 function inicializarBoletimAluno(nome) {
   const turma = usuarios[nome]?.turma || "";
   const turmasComFisicaQuimica = ["9º ano", "1ª série", "2ª série", "3ª série"];
@@ -741,6 +796,8 @@ function inicializarBoletimAluno(nome) {
     localStorage.setItem(chave, JSON.stringify(boletim));
   });
 }
+
+//USA BANCO DE DADOS AQUI
 
 function mostrarBoletimAluno(nome) {
   const container = document.getElementById("aluno-funcionalidade-boletim");
@@ -786,6 +843,8 @@ function mostrarBoletimAluno(nome) {
   container.appendChild(btnVoltar);
 }
 
+//USA BANCO DE DADOS AQUI
+
 function salvarNotasMultipla() {
   const serie = document.getElementById("serie-boletim").value;
   const aluno = document.getElementById("aluno-boletim").value;
@@ -810,6 +869,8 @@ function salvarNotasMultipla() {
   atualizarMediaProfessor();
 }
 
+//USA BANCO DE DADOS AQUI
+
 function atualizarMediaProfessor() {
   const aluno = document.getElementById("aluno-boletim").value;
   const disciplina = document.getElementById("disciplina-boletim").value;
@@ -832,6 +893,8 @@ function atualizarMediaProfessor() {
   const media = ((notas[0] + notas[1] + notas[2]) / 3).toFixed(2);
   mediaDiv.innerHTML = `<strong>Média:</strong> ${media}`;
 }
+
+
 
 function carregarNotasSalvasProfessor() {
   const aluno = document.getElementById("aluno-boletim").value;
@@ -868,6 +931,8 @@ function abrirGerenciamentoUsuarios() {
   });
 }
 
+//USA BANCO DE DADOS AQUI
+
 function salvarEdicaoUsuario(usuario) {
   const novaSenha = document.getElementById(`senha-${usuario}`).value;
   if (!novaSenha) return alert("Senha não pode estar vazia.");
@@ -875,6 +940,8 @@ function salvarEdicaoUsuario(usuario) {
   salvarUsuarios();
   alert("Usuário atualizado.");
 }
+
+//USA BANCO DE DADOS AQUI
 
 function removerUsuario(usuario) {
   if (usuariosFixos[usuario]) {
