@@ -77,7 +77,7 @@ document.addEventListener("DOMContentLoaded", () => {
       if (tipo === "aluno") {
         document.getElementById("area-aluno").style.display = "block";
         carregarDisciplinasParaAluno(usuario.turma || "");
-        mostrarBoletimAluno(usuario.email);
+        //mostrarBoletimAluno(usuario.email);
       } else if (tipo === "professor") {
         document.getElementById("area-professor").style.display = "block";
         const selectDisciplinas = document.getElementById("disciplina-boletim");
@@ -264,21 +264,22 @@ document.addEventListener("DOMContentLoaded", () => {
 
 //USA BANCO DE DADOS AQUI
 
-  const turmas = {
+  /* const turmas = {
     "1º ano": [],
     "2º ano": [],
     "3º ano": [],
     "4º ano": [],
     "5º ano": [],
     "6º ano": [],
-    "7º ano": ["telaalunofund"],
-    "8º ano": [],
+    "7º ano": ["telaalunofund"], //Isso aqui não está realmente acessando um banco de dados de alunos
+    "8º ano": [],                //É só uma lista que você pode selecionar uma string, por isso nem funciona no teste
     "9º ano": ["telaalunomed"],
     "1ª série": [],
     "2ª série": [],
     "3ª série": [],
   
   };
+*/
 
 //USA BANCO DE DADOS AQUI
 
@@ -477,7 +478,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
 //USA BANCO DE DADOS AQUI
 
-  function mostrarMaterialProfessor() {
+  /* function mostrarMaterialProfessor() {
     const usuario = document.getElementById("login").value.trim().toLowerCase();
     const prof = usuarios[usuario];
     if (prof && prof.tipo === "professor") {
@@ -492,6 +493,8 @@ document.addEventListener("DOMContentLoaded", () => {
       carregarDisciplinasParaProfessor(disciplinas);} 
       else {alert("Usuário atual não é um professor válido.");}
   }
+
+*/
 
 //USA BANCO DE DADOS AQUI
 
@@ -797,7 +800,7 @@ function inicializarBoletimAluno(nome) {
 
 //USA BANCO DE DADOS AQUI
 
-function mostrarBoletimAluno(nome) {
+/* function mostrarBoletimAluno(nome) {
   const container = document.getElementById("aluno-funcionalidade-boletim");
   container.innerHTML = "<h2>Boletim</h2>";
   const turma = (usuarios[nome]?.turma || "").toLowerCase();
@@ -840,6 +843,7 @@ function mostrarBoletimAluno(nome) {
   btnVoltar.onclick = () => fecharFuncionalidade('aluno');
   container.appendChild(btnVoltar);
 }
+*/
 
 //USA BANCO DE DADOS AQUI
 
