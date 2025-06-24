@@ -9,20 +9,12 @@ import disciplinaRoutes from './routes/disciplinas.routes.js';
 import authMiddleware from './middleware/authMiddleware.js';
 import authRoutes from './routes/auth.routes.js';
 
-import cors from 'cors';
-
 dotenv.config();
-
 
 const SECRET = process.env.JWT_SECRET;
 const app = express();
 app.use(express.static('frontend'));
 const port = process.env.PORT || 3000;
-
-app.use(cors({
-  origin: 'http://localhost:33151', // usei essa porta apenas para teste
-  credentials: true 
-}));
 
 app.use(express.json());
 app.use(cookieParser());
@@ -30,7 +22,7 @@ app.use(session({
   secret: SECRET,
   resave: false,
   saveUninitialized: true,
-  cookie: { secure: false } // use `true` apenas com HTTPS
+  cookie: { secure: false } // usar `true` só pra HTTPS
 }));
 
 app.get('/', (req, res) => {
@@ -41,21 +33,17 @@ app.get('/protegido', authMiddleware, (req, res) => {
   res.json({ message: `Olá, ${req.user.email}` });
 });
 
-app.get('/status', (req, res) => {
-  res.json({ status: 'ok', versao: '1.0.0' });
-});
-
 app.use('/auth', authRoutes);
 app.use('/alunos', alunoRoutes);
 app.use('/professores', professorRoutes);
 app.use('/disciplinas', disciplinaRoutes);
 
-// Função principal para iniciar o app
+// Aqui inicia o app
 const startApp = async () => {
   try {
     await db.authenticate();
     await db.sync({ alter: true });
-    console.log('Banco de dados conectado e sincronizado!');
+    console.log('Banco de dados conectado e sincronizado.');
 
     app.listen(port, () => {
       console.log(`Servidor rodando na porta ${port}`);

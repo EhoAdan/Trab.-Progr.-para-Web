@@ -68,8 +68,6 @@ document.addEventListener("DOMContentLoaded", () => {
       localStorage.setItem("token", token);
       localStorage.setItem("usuario", JSON.stringify(usuario))
 
-
-
       document.getElementById("login-section").style.display = "none";
       document.getElementById("btn-logout").style.display = "block";
 
