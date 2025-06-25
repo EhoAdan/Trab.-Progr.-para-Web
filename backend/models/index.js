@@ -9,7 +9,7 @@ import AlunoDisciplinasModel from './AlunoDisciplinas.js';
 
 const sequelize = new Sequelize(process.env.DB_URL, {
   dialect: 'postgres',
-  logging: false
+  logging: console.log
 });
 
 const db = {};
@@ -22,8 +22,8 @@ db.Professor = ProfessorModel(sequelize, DataTypes);
 db.Disciplina = DisciplinaModel(sequelize, DataTypes);
 db.AlunoDisciplinas = AlunoDisciplinasModel(sequelize, DataTypes);
 
-Object.values(db).forEach((model) => {
-  if (typeof model.associate === 'function') {
+Object.entries(db).forEach(([name, model]) => {
+  if (model?.associate && typeof model.associate === 'function') {
     model.associate(db);
   }
 });
