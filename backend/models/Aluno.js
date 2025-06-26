@@ -7,6 +7,11 @@ export default (sequelize, DataTypes) => {
   });
 
   Aluno.associate = (models) => {
+    Aluno.belongsTo(models.Turma, {
+      foreignKey: 'turmaId',
+      as: 'turma'
+    });
+
     Aluno.belongsToMany(models.Disciplina, {
       through: models.AlunoDisciplinas,
       foreignKey: 'alunoId',

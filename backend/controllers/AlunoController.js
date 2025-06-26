@@ -1,4 +1,4 @@
-import db from '../models/index.js';
+import db from '../database/index.js';
 const { Aluno, Disciplina } = db;
 
 
@@ -80,7 +80,9 @@ const alunoController = {
     console.error(err);
     res.status(500).json({ error: 'Erro ao buscar boletim do aluno' });
   }
-}, async adicionarDisciplinaComNota(req, res) {
+} , 
+
+  async adicionarDisciplinaComNota(req, res) {
   const { alunoId, disciplinaId } = req.params;
   const { nota } = req.body;
 

@@ -8,6 +8,7 @@ import professorRoutes from './routes/professor.routes.js';
 import disciplinaRoutes from './routes/disciplinas.routes.js';
 import authMiddleware from './middleware/authMiddleware.js';
 import authRoutes from './routes/auth.routes.js';
+import turmaRoutes from './routes/turma.routes.js';
 
 import cors from 'cors';
 
@@ -18,10 +19,7 @@ const SECRET = process.env.JWT_SECRET;
 const app = express();
 const port = process.env.PORT || 3000;
 
-app.use(cors({
-  origin: 'http://localhost:33151', // usei essa porta apenas para teste
-  credentials: true 
-}));
+app.use(cors());//back pode ser acessado de qualquer url do frontend
 
 app.use(express.json());
 app.use(cookieParser());
@@ -40,6 +38,7 @@ app.use('/auth', authRoutes);
 app.use('/alunos', alunoRoutes);
 app.use('/professores', professorRoutes);
 app.use('/disciplinas', disciplinaRoutes);
+app.use('/turmas', turmaRoutes)
 
 // Função principal para iniciar o app
 const startApp = async () => {

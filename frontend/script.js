@@ -78,8 +78,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
       if (tipo === "aluno") {
         document.getElementById("area-aluno").style.display = "block";
-        carregarDisciplinasParaAluno(usuario.turma || "");
-        mostrarBoletimAluno(usuario.email);
+        mostrarBoletimAluno(usuario.id);
       } else if (tipo === "professor") {
         document.getElementById("area-professor").style.display = "block";
         const selectDisciplinas = document.getElementById("disciplina-boletim");
@@ -165,16 +164,26 @@ document.addEventListener("DOMContentLoaded", () => {
     const email = document.getElementById("novo-email").value.trim().toLowerCase();
     const senha = document.getElementById("nova-senha").value;
     const atribuicao = document.getElementById("tipo-usuario").value;
+    
+    const turmaId = atribuicao === "aluno"
+    ? document.getElementById("turma-aluno").value
+    : undefined;
 
-    if (!nome || !senha || !atribuicao) {
+    const disciplinasIds = atribuicao === "professor"
+    ? Array.from(document.querySelectorAll(".disciplinas-professor:checked")).map(cb => cb.value)
+    : undefined;
+
+
+    if (!nome || !senha || !atribuicao || (atribuicao === "aluno" && !turmaId) || (atribuicao === "professor" && !disciplinasIds)) {
       alert("Preencha todos os campos.");
       return;
     }
+
     try {
     const res = await fetch("http://localhost:3000/auth/register", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ nome, email, senha, atribuicao })
+      body: JSON.stringify({ nome, email, senha, atribuicao, turmaId, disciplinasIds})
     });
 
     const data = await res.json();
@@ -260,21 +269,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   }
   
-  const turmas = {
-    "1º ano": [],
-    "2º ano": [],
-    "3º ano": [],
-    "4º ano": [],
-    "5º ano": [],
-    "6º ano": [],
-    "7º ano": ["telaalunofund"],
-    "8º ano": [],
-    "9º ano": ["telaalunomed"],
-    "1ª série": [],
-    "2ª série": [],
-    "3ª série": [],
-  
-  };
+  const turmas = {};
 
   function adicionarAlunoNaTurma(nomeAluno, nomeTurma) {
   const chave = `alunos_${nomeTurma}`;
@@ -370,6 +365,7 @@ document.addEventListener("DOMContentLoaded", () => {
       container.innerHTML = "<p>Nenhuma frequência registrada ainda.</p>";
       return;
     }
+
     dados.forEach(item => {
       const bloco = document.createElement("div");
       bloco.className = "bloco-frequencia";
@@ -384,69 +380,81 @@ document.addEventListener("DOMContentLoaded", () => {
       container.appendChild(bloco);
     });
   }
-  
-  function carregarDisciplinasParaAluno(turmaAluno) {
-    const disciplinasBase = [
-      { nome: "Português", valor: "portugues" },
-      { nome: "Matemática", valor: "matematica" },
-      { nome: "História", valor: "historia" },
-      { nome: "Geografia", valor: "geografia" },
-      { nome: "Ciências", valor: "ciencias" },
-      { nome: "Filosofia", valor: "filosofia" },
-      { nome: "Artes", valor: "artes" },
-    ];
-    const disciplinasAvancadas = [
-      { nome: "Física", valor: "fisica" },
-      { nome: "Química", valor: "quimica" }
-    ];
-    const select = document.getElementById("disciplina");
-    select.innerHTML = "<option value=''>-- Escolha --</option>";
-    disciplinasBase.forEach(d => {
-      const option = document.createElement("option");
-      option.value = d.valor;
-      option.textContent = d.nome;
-      select.appendChild(option);
-    });
-    const turmasComFisicaQuimica = ["9º ano", "1ª série", "2ª série", "3ª série"];
-    if (turmasComFisicaQuimica.includes(turmaAluno)) {
-      disciplinasAvancadas.forEach(d => {
-        const option = document.createElement("option");
-        option.value = d.valor;
-        option.textContent = d.nome;
-        select.appendChild(option);
-      });
+
+  let disciplinasDisponiveis = [];
+
+  async function carregarDisciplinas() {
+    try {
+      const res = await fetch("http://localhost:3000/disciplinas");
+      const dados = await res.json();
+      disciplinasDisponiveis = dados;
+
+      if (document.getElementById("tipo-usuario").value === "professor") {
+        atualizarCamposExtras();
+      }
+   } catch (err) {
+      console.error("Erro ao carregar disciplinas:", err);
     }
   }
-  
+
+
+  async function carregarTurmas() {
+    try {
+      const res = await fetch("http://localhost:3000/turmas");
+      const dados = await res.json();
+
+      dados.forEach(turma => {
+        turmas[turma.nome] = turma.id;
+      });
+
+    if (document.getElementById("tipo-usuario").value === "aluno") {
+      atualizarCamposExtras();
+    }
+  } catch (err) {
+      console.error("Erro ao carregar turmas:", err);
+    }
+  }
+  window.onload = () => {
+    carregarTurmas();
+    carregarDisciplinas();
+  };
+
+
   function atualizarCamposExtras() {
     const tipo = document.getElementById("tipo-usuario").value;
     const container = document.getElementById("campos-extras");
     container.innerHTML = "";
+
     if (tipo === "aluno") {
       const select = document.createElement("select");
       select.id = "turma-aluno";
-      const turmasDisponiveis = Object.keys(turmas);
       select.innerHTML = "<option value=''>Selecione a turma</option>";
-      turmasDisponiveis.forEach(turma => {
+
+      Object.entries(turmas).forEach(([nome, id]) => {
         const option = document.createElement("option");
-        option.value = turma;
-        option.textContent = turma;
+        option.value = id;
+        option.textContent = nome;
         select.appendChild(option);
       });
+
       container.appendChild(document.createTextNode("Turma do Aluno:"));
       container.appendChild(select);
     }
-    if (tipo === "professor") {const disciplinas = ["Português", "Matemática", "História", "Geografia", "Ciências","Filosofia", "Artes", "Física", "Química"];
+
+    if (tipo === "professor") {
       container.appendChild(document.createTextNode("Disciplinas que leciona:"));
-      disciplinas.forEach(disc => {
+
+      disciplinasDisponiveis.forEach(disc => {
         const label = document.createElement("label");
         label.style.display = "block";
+
         const checkbox = document.createElement("input");
         checkbox.type = "checkbox";
-        checkbox.value = disc;
+        checkbox.value = disc.id;
         checkbox.className = "disciplinas-professor";
+
         label.appendChild(checkbox);
-        label.appendChild(document.createTextNode(" " + disc));
+        label.appendChild(document.createTextNode(" " + disc.nome));
         container.appendChild(label);
       });
     }
@@ -467,7 +475,7 @@ document.addEventListener("DOMContentLoaded", () => {
       carregarDisciplinasParaProfessor(disciplinas);} 
       else {alert("Usuário atual não é um professor válido.");}
   }
-  
+
   function carregarDisciplinasParaProfessor(disciplinas) {
     const select = document.getElementById("disciplina-prof");
     select.innerHTML = "<option value=''>-- Escolha --</option>";
@@ -742,48 +750,56 @@ function inicializarBoletimAluno(nome) {
   });
 }
 
-function mostrarBoletimAluno(nome) {
+  async function mostrarBoletimAluno(id) {
   const container = document.getElementById("aluno-funcionalidade-boletim");
   container.innerHTML = "<h2>Boletim</h2>";
-  const turma = (usuarios[nome]?.turma || "").toLowerCase();
-  const disciplinasBase = ["matematica", "portugues", "historia", "geografia", "ciencias", "filosofia", "artes"];
-  const disciplinasAvancadas = ["fisica", "quimica"];
-  const turmasComFisicaQuimica = ["9º ano", "1ª série", "2ª série", "3ª série"];
-  const incluirAvancadas = turmasComFisicaQuimica.map(t => t.toLowerCase()).includes(turma);
-  const disciplinas = incluirAvancadas ? disciplinasBase.concat(disciplinasAvancadas) : disciplinasBase;
-  let totalMedias = [];
-  let todasNotasPreenchidas = true;
-  disciplinas.forEach(disciplina => {
-    const chave = `boletim_${nome}_${disciplina}`;
-    const dados = JSON.parse(localStorage.getItem(chave)) || {prova1: "Ainda sem notas", prova2: "Ainda sem notas", trabalho: "Ainda sem notas"};
-    const notas = [dados.prova1, dados.prova2, dados.trabalho];
-    const notasNumericas = notas.map(n => parseFloat(n)).filter(n => !isNaN(n));
-    let mediaTexto = "Média: Disponível após receber as 3 notas";
-    if (notasNumericas.length === 3) {
-      const media = ((notasNumericas[0] + notasNumericas[1] + notasNumericas[2]) / 3).toFixed(2);
-      mediaTexto = `Média: ${media}`;
-      totalMedias.push(parseFloat(media));
-    } 
-    else {todasNotasPreenchidas = false;}
-    const div = document.createElement("div");
-    div.className = "bloco-mensagem";
-    div.innerHTML = `<h3>${disciplina.toUpperCase()}</h3>
-                     <p><strong>Prova 1:</strong> ${dados.prova1}</p>
-                     <p><strong>Prova 2:</strong> ${dados.prova2}</p>
-                     <p><strong>Trabalho:</strong> ${dados.trabalho}</p>
-                     <p><strong>${mediaTexto}</strong></p>`;
-    container.appendChild(div);
-  });
-  const situacao = document.createElement("div");
-  situacao.className = "bloco-mensagem";
-  let statusFinal = "Em andamento";
-  if (totalMedias.length === disciplinas.length) {statusFinal = totalMedias.every(m => m >= 7) ? "Aprovado" : "Reprovado";}
-  situacao.innerHTML = `<h3>Situação Final: ${statusFinal}</h3>`;
-  container.appendChild(situacao);
-  const btnVoltar = document.createElement("button");
-  btnVoltar.textContent = "Voltar";
-  btnVoltar.onclick = () => fecharFuncionalidade('aluno');
-  container.appendChild(btnVoltar);
+  try {
+      const res = await fetch(`http://localhost:3000/alunos/${id}/boletim`, {
+        method: "GET",
+        headers: { "Content-Type": "application/json" }
+      });
+      let aprovado = true;
+
+      const texto = await res.text();
+      console.log("Resposta da API:", texto);
+      
+      let boletim;
+      try {
+        boletim = JSON.parse(texto);
+
+      } catch(e) {
+        console.error("Erro ao fazer parse do JSON:", e);
+        container.innerHTML += "<p>Erro: resposta inválida do servidor.</p>";
+        return;
+      }
+
+      boletim.forEach(({ disciplina, codigo, nota }) => {
+      if (nota < 7) aprovado = false;
+
+      const div = document.createElement("div");
+      div.className = "bloco-mensagem";
+      div.innerHTML = `
+        <h3>${disciplina.toUpperCase()}</h3>
+        <p><strong>Código:</strong> ${codigo}</p>
+        <p><strong>Nota:</strong> ${nota}</p>
+      `;
+      container.appendChild(div);
+    });
+
+    const situacao = document.createElement("div");
+    situacao.className = "bloco-mensagem";
+    situacao.innerHTML = `<h3>Situação Final: ${aprovado ? "Aprovado" : "Reprovado"}</h3>`;
+    container.appendChild(situacao);
+
+    const btnVoltar = document.createElement("button");
+    btnVoltar.textContent = "Voltar";
+    btnVoltar.onclick = () => fecharFuncionalidade("aluno");
+    container.appendChild(btnVoltar);
+
+  } catch (erro) {
+    console.error("Erro ao buscar boletim:", erro);
+    container.innerHTML += "<p>Erro ao carregar boletim.</p>";
+  }
 }
 
 function salvarNotasMultipla() {
