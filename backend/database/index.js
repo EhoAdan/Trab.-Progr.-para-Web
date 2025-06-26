@@ -35,5 +35,5 @@ const db = {
   authenticate: () => sequelize.authenticate(),
   sync: (options) => sequelize.sync(options),
 };
-
+""
 export default db;

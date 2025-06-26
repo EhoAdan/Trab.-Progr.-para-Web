@@ -1,27 +1,217 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="pt-br">
+
 <head>
-  <meta charset="UTF-8">
-  <title>Teste de Fetch Alunos</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Sistema Escolar</title>
+  <link rel="stylesheet" href="style.css" />
+  <script>localStorage.setItem("tema", "escuro")</script>
 </head>
+
 <body>
-  <h1>Lista de Alunos</h1>
-  <ul id="lista-alunos"></ul>
 
-  <script>
-    const DB_URL = 'postgres://root:root@localhost:5432/school';
+  <div id="barra-topo">
+    <div>
+        <select id="seletor-tema" onchange="mudarTemaPorSelecao(this)">
+          <option value="claro">Tema Claro</option>
+          <option value="escuro">Tema Escuro</option>
+        </select>
+    </div>
+    <div id="logout-container">
+      <button id="btn-logout" onclick="logout()">Sair</button>
+    </div>
+  </div>
 
-    fetch(DB_URL)
-      .then(response => response.json())
-      .then(data => {
-        const lista = document.getElementById('lista-alunos');
-        data.forEach(aluno => {
-          const li = document.createElement('li');
-          li.textContent = `ID: ${aluno.id} - Nome: ${aluno.nome}`;
-          lista.appendChild(li);
-        });
-      })
-      .catch(error => console.error('Erro ao buscar alunos:', error));
-  </script>
+  <section id="login-section">
+    
+    <h1 class="bem-vindo">Bem-vindo ao sistema escolar!</h1>
+    <h2>Login:</h2>
+    <input type="text" id="login" placeholder="Digite seu login" />
+    
+    <h2>Senha:</h2>
+    <div class="senha-container">
+      <input type="password" id="senha" placeholder="Digite sua senha" />
+      <button type="button" id="btn-ver-senha"></button>
+    </div>
+
+    <button type="submit" onclick="fazerLogin()">Entrar</button>
+
+    <div id="login-actions">
+      <button onclick="mostrarCriarUsuario()">Criar usuário</button>  
+      <button onclick="mostrarRedefinirSenha()">Esqueci a senha</button>
+    </div>
+
+  </section>
+
+  <section id="area-aluno">
+    
+    <h1>Área do Aluno</h1>
+    <div class="aluno-menu">
+      <button onclick="abrirFuncionalidade('aluno', 'boletim')">Boletim</button>
+      <button onclick="abrirFuncionalidade('aluno', 'frequencia')">Frequência escolar</button>
+      <button onclick="abrirFuncionalidade('aluno', 'material')">Material didático</button>
+    </div>
+
+    <div id="aluno-funcionalidade-boletim" class="funcionalidade">
+      
+      <h2>Boletim</h2>
+      <p>Conteúdo do boletim.</p>
+      <!--Precisa preencher boletim-->
+      <button onclick="fecharFuncionalidade('aluno')">Voltar</button>
+    </div>
+
+    <div id="aluno-funcionalidade-frequencia" class="funcionalidade">
+      
+      <h2>Frequência Escolar</h2>
+      <p>Conteúdo da frequência.</p>
+      <!--Precisa preencher frequência-->
+      <button onclick="fecharFuncionalidade('aluno')">Voltar</button>
+    </div>
+
+    <div id="aluno-funcionalidade-material" class="funcionalidade">
+      
+      <h2>Material Didático</h2>
+      <div id="selecionar-disciplina">
+        <label for="disciplina">Selecione a disciplina:</label>
+        <select id="disciplina">
+        <!--Aqui preenche puxando do Back/Banco de Dados-->
+        </select>
+      </div>
+      <div id="livros-container">
+        <!--Aqui preenche puxando do Back/Banco de Dados-->
+      </div>
+      <button onclick="fecharFuncionalidade('aluno')">Voltar</button>
+    </div>
+  </section>
+
+  <section id="area-professor">
+    
+    <h1>Área do Professor</h1>
+    <div class="professor-menu">
+      <button onclick="abrirFuncionalidade('professor', 'frequencia');mostrarFrequencia()">Frequência</button>
+      <button onclick="abrirFuncionalidade('professor', 'historico');mostrarHistoricoFrequencia()">Ver Histórico de Frequência</button>
+      <button onclick="abrirFuncionalidade('professor', 'boletim')">Boletim</button>
+      <button onclick="abrirFuncionalidade('professor', 'material');mostrarMaterialProfessor()">Material didático</button>
+    </div>
+
+    <div id="professor-funcionalidade-frequencia" class="funcionalidade">
+      
+      <h2>Registrar Frequência</h2>
+      <label for="turma-frequencia">Selecione a série:</label>
+      <select id="turma-frequencia" onchange="carregarAlunosTurma()"></select>
+      <div id="alunos-frequencia"></div>
+      <button onclick="salvarFrequencia()" class="botao-salvar">Salvar Frequência</button>
+      <button onclick="fecharFuncionalidade('professor')">Voltar</button>
+    </div>
+    
+    <div id="professor-funcionalidade-historico" class="funcionalidade">
+      
+      <h2>Histórico de Frequência</h2>
+      <div id="historico-frequencia-container">
+        <!--Aqui preenche puxando do banco de dados-->
+      </div>
+      <button onclick="fecharFuncionalidade('professor')">Voltar</button>
+    </div>
+
+    <div id="professor-funcionalidade-boletim" class="funcionalidade">
+      
+      <h2>Lançar Notas</h2>
+      <label for="serie-boletim">Série (Turma):</label>
+      <select id="serie-boletim" onchange="preencherAlunosDaSerie()"></select>
+      <label for="aluno-boletim">Aluno:</label>
+      <select id="aluno-boletim" onchange="carregarNotasSalvasProfessor()"></select>
+      <label for="disciplina-boletim">Disciplina:</label>
+      <select id="disciplina-boletim" onchange="carregarNotasSalvasProfessor()"></select>
+      <label for="nota-prova1">Nota - Prova 1:</label>
+      <input type="number" id="nota-prova1" min="0" max="10" step="0.1" />
+      <label for="nota-prova2">Nota - Prova 2:</label>
+      <input type="number" id="nota-prova2" min="0" max="10" step="0.1" />
+      <label for="nota-trabalho">Nota - Trabalho:</label>
+      <input type="number" id="nota-trabalho" min="0" max="10" step="0.1" />
+      <p id="media-professor"><strong>Média:</strong> Disponível após preencher todas as notas</p>
+      <button onclick="salvarNotasMultipla()">Salvar Nota</button>
+      <button onclick="fecharFuncionalidade('professor')">Voltar</button>
+    </div>
+
+    <div id="professor-funcionalidade-material" class="funcionalidade">
+      
+      <h2>Material Didático</h2>
+      <div id="selecionar-disciplina-prof">
+        <label for="disciplina-prof">Selecione a disciplina:</label>
+        <select id="disciplina-prof">
+          <!--Aqui preenche puxando do banco de dados-->
+        </select>
+      </div>
+      <div id="livros-container-prof">
+        <!--Aqui preenche puxando do banco de dados-->
+      </div>
+      <button onclick="fecharFuncionalidade('professor')">Voltar</button>
+    </div>
+
+  </section>
+
+  <section id="area-secretaria">
+    
+    <h1>Área da Secretaria</h1>
+    <div id="secretaria-menu">
+      <button onclick="abrirFuncionalidade('secretaria', 'usuarios')">Usuários</button>
+      <button
+        onclick="abrirFuncionalidade('secretaria', 'reclamacoes-recebidas');mostrarReclamacoesSecretaria()">Reclamações Recebidas</button>
+      <button onclick="abrirFuncionalidade('secretaria', 'suporte')">Suporte</button>
+    </div>
+
+    <div id="secretaria-funcionalidade-reclamacoes-recebidas" class="funcionalidade">
+      
+      <h2>Reclamações Recebidas</h2>
+      <div id="painel-reclamacoes-secretaria"></div>
+      <button onclick="fecharFuncionalidade('secretaria')">Voltar</button>
+    </div>
+
+    <div id="secretaria-funcionalidade-usuarios" class="funcionalidade">
+      
+      <h2>Usuários</h2>
+      <div id="lista-usuarios">
+        <!--Aqui preenche puxando do banco de dados-->
+      </div>
+      <p>Gerenciamento de usuários.</p>
+      <button onclick="fecharFuncionalidade('secretaria')">Voltar</button>
+    </div>
+  
+  </section>
+
+  <section id="criar-usuario-section">
+    
+    <h2>Criar novo usuário</h2>
+    <input type="text" id="novo-usuario" placeholder="Novo login" />
+    <input type="text" id="novo-email" placeholder="Email" />
+    <input type="password" id="nova-senha" placeholder="Nova senha" />
+    
+    <select id="tipo-usuario" onchange="atualizarCamposExtras()">
+      <option value="">Selecione o tipo</option>
+      <option value="aluno">Aluno</option>
+      <option value="professor">Professor</option>
+      <option value="funcionario">Funcionário</option>
+      <option value="secretaria">Secretaria</option>
+    </select>
+    
+    <div id="campos-extras">
+      <!--Aqui preenche puxando do banco de dados-->
+    </div>
+    <button onclick="criarUsuario()">Criar</button>
+    <button onclick="voltarLogin()">Voltar</button>
+  </section>
+
+  <section id="redefinir-senha-section">
+    
+    <h2>Redefinir senha</h2>
+    <input type="text" id="usuario-redefinir" placeholder="Usuário" />
+    <input type="password" id="nova-senha-redefinir" placeholder="Nova senha" />
+    <button onclick="redefinirSenha()">Redefinir</button>
+    <button onclick="voltarLogin()">Voltar</button>
+  </section>
+
+  <script src="script.js"></script>
+
 </body>
 </html>

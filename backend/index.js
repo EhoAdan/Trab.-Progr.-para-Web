@@ -10,13 +10,11 @@ import authMiddleware from './middleware/authMiddleware.js';
 import authRoutes from './routes/auth.routes.js';
 import turmaRoutes from './routes/turma.routes.js';
 
-import cors from 'cors';
-
 dotenv.config();
-
 
 const SECRET = process.env.JWT_SECRET;
 const app = express();
+app.use(express.static('frontend'));
 const port = process.env.PORT || 3000;
 
 app.use(cors());//back pode ser acessado de qualquer url do frontend
@@ -27,8 +25,12 @@ app.use(session({
   secret: SECRET,
   resave: false,
   saveUninitialized: true,
-  cookie: { secure: false } // use `true` apenas com HTTPS
+  cookie: { secure: false } // usar `true` só pra HTTPS
 }));
+
+app.get('/', (req, res) => {
+  res.send('Conseguimos acessar o site');
+});
 
 app.get('/protegido', authMiddleware, (req, res) => {
   res.json({ message: `Olá, ${req.user.email}` });
@@ -40,12 +42,12 @@ app.use('/professores', professorRoutes);
 app.use('/disciplinas', disciplinaRoutes);
 app.use('/turmas', turmaRoutes)
 
-// Função principal para iniciar o app
+// Aqui inicia o app
 const startApp = async () => {
   try {
     await db.authenticate();
     await db.sync({ alter: true });
-    console.log('Banco de dados conectado e sincronizado!');
+    console.log('Banco de dados conectado e sincronizado.');
 
     app.listen(port, () => {
       console.log(`Servidor rodando na porta ${port}`);
