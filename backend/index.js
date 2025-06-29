@@ -10,15 +10,20 @@ import authMiddleware from './middleware/authMiddleware.js';
 import authRoutes from './routes/auth.routes.js';
 import turmaRoutes from './routes/turma.routes.js';
 import cors from 'cors';
+import path from 'path';
+import { fileURLToPath } from 'url';
 
 dotenv.config();
+
+const filename = fileURLToPath(import.meta.url);
+const dirname = path.dirname(filename);
 
 const port = process.env.PORT || 3000;
 const SECRET = process.env.JWT_SECRET;
 const app = express();
 
 app.use(express.json());
-app.use(cors()); //back pode ser acessado de qualquer url do frontend
+app.use(cors());
 app.use(cookieParser());
 app.use(session({
   secret: SECRET,
@@ -27,20 +32,21 @@ app.use(session({
   cookie: { secure: false } // usar `true` só pra HTTPS
 }));
 
+app.use(express.static(path.join(dirname, '..', 'frontend')));
+
+app.get('/', (req, res) => {
+  res.sendFile(path.join(dirname, '..', 'frontend', 'index.html'));
+});
+
 app.use('/auth', authRoutes);
 app.use('/alunos', alunoRoutes);
 app.use('/professores', professorRoutes);
 app.use('/disciplinas', disciplinaRoutes);
 app.use('/turmas', turmaRoutes)
 
-// app.get('/', (req, res) => {
-//   const filePath = path.join(__dirname, 'newfrontend', 'newindex.html')
-//   res.sendFile(filePath);
-// });
-
-// app.get('/protegido', authMiddleware, (req, res) => {
-//   res.json({ message: `Olá, ${req.user.email}` });
-// });
+app.get('/protegido', authMiddleware, (req, res) => {
+  res.json({ message: `Olá, ${req.user.email}` });
+});
 
 // Aqui inicia o app
 const startApp = async () => {
