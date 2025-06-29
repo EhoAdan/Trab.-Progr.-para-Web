@@ -66,6 +66,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
       const {token, usuario} = data;
       localStorage.setItem("token", token);
+      
       localStorage.setItem("usuario", JSON.stringify(usuario))
 
       document.getElementById("login-section").style.display = "none";
@@ -799,9 +800,9 @@ function inicializarBoletimAluno(nome) {
       const res = await fetch(`http://localhost:3000/alunos/${id}/boletim`, {
         method: "GET",
         headers: {
-          "Content-Type": "application/json" },
+          "Content-Type": "application/json" ,
           "Authorization": `Bearer ${localStorage.getItem("token")}`
-      });
+      }});
 
       let aprovado = true;
 
