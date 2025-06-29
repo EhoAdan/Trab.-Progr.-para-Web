@@ -58,6 +58,14 @@ const alunoController = {
   }, 
   
   async listarBoletim(req, res) {
+  
+  const { id } = req.params;
+  const { id: userId, atribuicao } = req.user;
+
+  if (atribuicao === "aluno" && parseInt(id) !== userId) {
+    return res.status(403).json({ error: "Acesso não autorizado ao boletim de outro aluno" });
+  }
+
   try {
     const aluno = await Aluno.findByPk(req.params.id, {
       include: {
