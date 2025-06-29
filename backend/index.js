@@ -9,16 +9,16 @@ import disciplinaRoutes from './routes/disciplinas.routes.js';
 import authMiddleware from './middleware/authMiddleware.js';
 import authRoutes from './routes/auth.routes.js';
 import turmaRoutes from './routes/turma.routes.js';
-import cors from "cors"
+import cors from 'cors';
+import path from 'path';
 
 dotenv.config();
 
 const SECRET = process.env.JWT_SECRET;
 const app = express();
-app.use(express.static('frontend'));
 const port = process.env.PORT || 3000;
 
-app.use(cors());//back pode ser acessado de qualquer url do frontend
+app.use(cors()); //back pode ser acessado de qualquer url do frontend
 
 app.use(express.json());
 app.use(cookieParser());
@@ -30,7 +30,8 @@ app.use(session({
 }));
 
 app.get('/', (req, res) => {
-  res.send('Conseguimos acessar o site');
+  const filePath = path.join(__dirname, 'newfrontend', 'newindex.html')
+  res.sendFile(filePath);
 });
 
 app.get('/protegido', authMiddleware, (req, res) => {
