@@ -9,6 +9,7 @@ import disciplinaRoutes from './routes/disciplinas.routes.js';
 import authMiddleware from './middleware/authMiddleware.js';
 import authRoutes from './routes/auth.routes.js';
 import turmaRoutes from './routes/turma.routes.js';
+import cors from "cors"
 
 dotenv.config();
 

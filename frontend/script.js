@@ -104,7 +104,6 @@ document.addEventListener("DOMContentLoaded", () => {
         document.getElementById("area-suporte").style.display = "block";
       }
 
-    
     } catch (err) {
       console.error(err);
       alert("Erro de rede ou servidor offline");
@@ -799,8 +798,11 @@ function inicializarBoletimAluno(nome) {
   try {
       const res = await fetch(`http://localhost:3000/alunos/${id}/boletim`, {
         method: "GET",
-        headers: { "Content-Type": "application/json" }
+        headers: {
+          "Content-Type": "application/json" },
+          "Authorization": `Bearer ${localStorage.getItem("token")}`
       });
+
       let aprovado = true;
 
       const texto = await res.text();
