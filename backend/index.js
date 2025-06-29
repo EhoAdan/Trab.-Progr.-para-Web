@@ -12,6 +12,7 @@ import turmaRoutes from './routes/turma.routes.js';
 import cors from 'cors';
 import path from 'path';
 import { fileURLToPath } from 'url';
+// import seed from './scriptSeed.js';
 
 dotenv.config();
 
@@ -54,6 +55,8 @@ const startApp = async () => {
     await db.authenticate();
     await db.sync({ alter: true });
     console.log('Banco de dados conectado e sincronizado.');
+
+    // await seed();
 
     app.listen(port, () => {
       console.log(`Servidor rodando na porta ${port}`);

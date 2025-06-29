@@ -4,7 +4,7 @@ import db from './database/index.js';
 const seed = async () => {
   try {
     await db.sequelize.sync();
-    console.log('🟢 Banco sincronizado (sem apagar dados).');
+    console.log('Banco sincronizado (sem apagar dados).');
 
     const alunosExistem = await db.Aluno.count();
     const professoresExistem = await db.Professor.count();
@@ -12,7 +12,7 @@ const seed = async () => {
     const turmasExistem = await db.Turma.count()
 
     if (alunosExistem || professoresExistem || disciplinasExistem || turmasExistem) {
-      console.log('⚠️ Dados já existem no banco. Seed não foi executado novamente.');
+      console.log('Dados já existem no banco. Seed não foi executado novamente.');
       process.exit();
     }
 
@@ -52,11 +52,11 @@ const seed = async () => {
       aluno2.addBoletim([disc2, disc3], { through: { nota: 7.0 } }),
     ]);
 
-    console.log('✅ Seed executado com sucesso!');
+    console.log('Seed executado com sucesso!');
 
   } catch (err) {
 
-    console.error('❌ Erro ao executar seed:', err);
+    console.error('Erro ao executar seed:', err);
 
   } finally {
 
@@ -67,3 +67,5 @@ const seed = async () => {
 };
 
 seed();
+
+// export default seed;
