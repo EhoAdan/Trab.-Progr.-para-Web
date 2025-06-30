@@ -21,6 +21,7 @@ const AlunoDisciplinas = AlunoDisciplinasModel(sequelize, DataTypes);
 const Turma = TurmaModel(sequelize, DataTypes);
 
 Aluno.associate?.({ Disciplina, AlunoDisciplinas, Turma});
+Professor.associate?.({ Disciplina })
 Disciplina.associate?.({ Aluno, Professor, AlunoDisciplinas });
 Turma.associate?.({Aluno});
 

@@ -8,7 +8,7 @@ const professorController = {
       const professores = await Professor.findAll({ include: Disciplina });
       res.json(professores);
     } catch (err) {
-      res.status(500).json({ error: 'Erro ao listar professores' });
+      res.status(500).json({ error: 'Erro ao listar professores', detalhe: err.message});
     }
   },
 

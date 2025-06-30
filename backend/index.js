@@ -12,7 +12,6 @@ import turmaRoutes from './routes/turma.routes.js';
 import cors from 'cors';
 import path from 'path';
 import { fileURLToPath } from 'url';
-// import seed from './scriptSeed.js';
 
 dotenv.config();
 
@@ -43,7 +42,7 @@ app.use('/auth', authRoutes);
 app.use('/alunos', alunoRoutes);
 app.use('/professores', professorRoutes);
 app.use('/disciplinas', disciplinaRoutes);
-app.use('/turmas', turmaRoutes)
+app.use('/turmas', turmaRoutes);
 
 app.get('/protegido', authMiddleware, (req, res) => {
   res.json({ message: `Olá, ${req.user.email}` });
@@ -55,8 +54,6 @@ const startApp = async () => {
     await db.authenticate();
     await db.sync({ alter: true });
     console.log('Banco de dados conectado e sincronizado.');
-
-    // await seed();
 
     app.listen(port, () => {
       console.log(`Servidor rodando na porta ${port}`);
