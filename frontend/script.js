@@ -80,16 +80,16 @@ document.addEventListener("DOMContentLoaded", () => {
         mostrarBoletimAluno(usuario.id);
       } else if (tipo === "professor") {
         document.getElementById("area-professor").style.display = "block";
-        const selectDisciplinas = document.getElementById("disciplina-boletim");
+        const selectDisciplinas = document.getElementById("disciplina-select");
         selectDisciplinas.innerHTML = "<option value=''>-- Selecione --</option>";
         (usuario.disciplinas || []).forEach(disc => {
           const opt = document.createElement("option");
-          opt.value = disc.toLowerCase();
-          opt.textContent = disc;
+          opt.value = disc.id;
+          opt.textContent = disc.nome;
           selectDisciplinas.appendChild(opt);
         });
 
-        const selectSerie = document.getElementById("serie-boletim");
+        const selectSerie = document.getElementById("turma-select");
         selectSerie.innerHTML = "<option value=''>-- Selecione --</option>";
         Object.keys(turmas).forEach(serie => {
           const opt = document.createElement("option");
@@ -97,6 +97,9 @@ document.addEventListener("DOMContentLoaded", () => {
           opt.textContent = serie;
           selectSerie.appendChild(opt);
         });
+        carregarTurmasParaProfessor();
+        preencherDisciplinasProfessor(usuario);
+
       } else if (tipo === "funcionario") {
         document.getElementById("area-funcionario").style.display = "block";
       } else if (tipo === "secretaria") {
@@ -272,15 +275,6 @@ document.addEventListener("DOMContentLoaded", () => {
   }
   
   const turmas = {};
-
-  function adicionarAlunoNaTurma(nomeAluno, nomeTurma) {
-  const chave = `alunos_${nomeTurma}`;
-  const lista = JSON.parse(localStorage.getItem(chave)) || [];
-  if (!lista.includes(nomeAluno)) {
-    lista.push(nomeAluno);
-    localStorage.setItem(chave, JSON.stringify(lista));
-  }
-}
 
 //USA BANCO DE DADOS AQUI
 
@@ -474,6 +468,108 @@ document.addEventListener("DOMContentLoaded", () => {
       });
     }
   }
+//
+
+async function carregarTurmasParaProfessor() {
+  const turmaSelect = document.getElementById("turma-select");
+  turmaSelect.innerHTML = "<option value=''>-- Selecione uma Turma --</option>";
+
+  try {
+    const res = await fetch("http://localhost:3000/turmas", {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("token")}`
+      }
+    });
+    const turmas = await res.json();
+
+    turmas.forEach(turma => {
+      const opt = document.createElement("option");
+      opt.value = turma.id;
+      opt.textContent = turma.nome;
+      turmaSelect.appendChild(opt);
+    });
+
+  } catch (err) {
+    console.error("Erro ao carregar turmas:", err);
+  }
+}
+
+document.getElementById("turma-select").addEventListener("change", async function () {
+  const turmaId = this.value;
+  const alunoSelect = document.getElementById("aluno-select");
+  alunoSelect.innerHTML = "<option value=''>-- Selecione um Aluno --</option>";
+
+  if (!turmaId) return;
+
+  try {
+    const res = await fetch(`http://localhost:3000/turmas/${turmaId}/alunos`, {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("token")}`
+      }
+    });
+    const alunos = await res.json();
+
+    alunos.forEach(aluno => {
+      const opt = document.createElement("option");
+      opt.value = aluno.id;
+      opt.textContent = aluno.nome;
+      alunoSelect.appendChild(opt);
+    });
+
+  } catch (err) {
+    console.error("Erro ao carregar alunos:", err);
+  }
+});
+
+function preencherDisciplinasProfessor(professor) {
+  const select = document.getElementById("disciplina-select");
+  select.innerHTML = "<option value=''>-- Selecione uma Disciplina --</option>";
+
+  (professor.disciplinas || []).forEach(disc => {
+    const opt = document.createElement("option");
+    opt.value = disc.id || disc;
+    opt.textContent = disc.nome || disc;
+    select.appendChild(opt);
+  });
+}
+
+async function lancarNota() {
+  const alunoId = document.getElementById("aluno-select").value;
+  const disciplinaId = document.getElementById("disciplina-select").value;
+  const nota = parseFloat(document.getElementById("nota-input").value);
+  const mensagem = document.getElementById("mensagem-lancar-nota");
+
+  if (!alunoId || !disciplinaId || isNaN(nota)) {
+    mensagem.textContent = "Preencha todos os campos corretamente.";
+    return;
+  }
+
+  try {
+    const res = await fetch(`http://localhost:3000/alunos/${alunoId}/disciplinas/${disciplinaId}`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${localStorage.getItem("token")}`
+      },
+      body: JSON.stringify({ nota })
+    });
+
+    const data = await res.json();
+
+    if (!res.ok) {
+      mensagem.textContent = data.error || "Erro ao lançar nota.";
+      return;
+    }
+
+    mensagem.textContent = "Nota lançada com sucesso!";
+  } catch (err) {
+    console.error("Erro ao lançar nota:", err);
+    mensagem.textContent = "Erro ao lançar nota.";
+  }
+}
+
+
+
 
 //USA BANCO DE DADOS AQUI
 
@@ -493,19 +589,6 @@ document.addEventListener("DOMContentLoaded", () => {
       else {alert("Usuário atual não é um professor válido.");}
   }
 
-  function carregarDisciplinasParaProfessor(disciplinas) {
-    const select = document.getElementById("disciplina-prof");
-    select.innerHTML = "<option value=''>-- Escolha --</option>";
-    disciplinas.forEach(disc => {
-      const valor = disc.toLowerCase();
-      const option = document.createElement("option");
-      option.value = valor;
-      option.textContent = disc;
-      select.appendChild(option);
-    });
-    const container = document.getElementById("livros-container-prof");
-    container.innerHTML = "";
-  }
 //USA BANCO DE DADOS AQUI
   function mudarTemaPorSelecao(select) {
     const tema = select.value;
@@ -744,54 +827,7 @@ function mostrarHistoricoUsuario(tipoUsuario) {
 
 //USA BANCO DE DADOS AQUI
 
-function preencherAlunosDaSerie() {
-  const serie = document.getElementById("serie-boletim").value;
-  const select = document.getElementById("aluno-boletim");
-  select.innerHTML = "<option value=''>-- Selecione --</option>";
-  const lista = turmas[serie] || [];
-  lista.forEach(nome => {
-    const opt = document.createElement("option");
-    opt.value = nome;
-    opt.textContent = nome;
-    select.appendChild(opt);
-  });
-}
-
 //USA BANCO DE DADOS AQUI
-
-function salvarNota() {
-  const serie = document.getElementById("serie-boletim").value;
-  const aluno = document.getElementById("aluno-boletim").value;
-  const disciplina = document.getElementById("disciplina-boletim").value;
-  const tipoNota = document.getElementById("tipo-nota").value;
-  const valor = document.getElementById("nota").value;
-  if (!serie || !aluno || !disciplina || !tipoNota || valor === "") {
-    alert("Preencha todos os campos.");
-    return;
-  }
-  const chave = `boletim_${aluno}_${disciplina}`;
-  const boletim = JSON.parse(localStorage.getItem(chave)) || {prova1: "Ainda sem notas", prova2: "Ainda sem notas",trabalho: "Ainda sem notas"};
-  boletim[tipoNota] = valor;
-  localStorage.setItem(chave, JSON.stringify(boletim));
-  alert("Nota salva com sucesso!");
-  document.getElementById("nota").value = "";
-}
-
-
-
-function inicializarBoletimAluno(nome) {
-  const turma = usuarios[nome]?.turma || "";
-  const turmasComFisicaQuimica = ["9º ano", "1ª série", "2ª série", "3ª série"];
-  const disciplinasBase = ["matematica", "portugues", "historia", "geografia", "ciencias", "filosofia", "artes"];
-  const disciplinasAvancadas = ["fisica", "quimica"];
-  const incluirAvancadas = turmasComFisicaQuimica.includes(turma.toLowerCase());
-  const disciplinas = incluirAvancadas ? disciplinasBase.concat(disciplinasAvancadas) : disciplinasBase;
-  disciplinas.forEach(disciplina => {
-    const chave = `boletim_${nome}_${disciplina}`;
-    const boletim = {prova1: "Ainda sem notas", prova2: "Ainda sem notas", trabalho: "Ainda sem notas"};
-    localStorage.setItem(chave, JSON.stringify(boletim));
-  });
-}
 
   async function mostrarBoletimAluno(id) {
   const container = document.getElementById("aluno-funcionalidade-boletim");
@@ -848,75 +884,7 @@ function inicializarBoletimAluno(nome) {
   }
 }
 
-function salvarNotasMultipla() {
-  const serie = document.getElementById("serie-boletim").value;
-  const aluno = document.getElementById("aluno-boletim").value;
-  const disciplina = document.getElementById("disciplina-boletim").value;
-  const nota1 = document.getElementById("nota-prova1").value;
-  const nota2 = document.getElementById("nota-prova2").value;
-  const notaT = document.getElementById("nota-trabalho").value;
-  if (!serie || !aluno || !disciplina) {
-    alert("Selecione a série, aluno e disciplina.");
-    return;
-  }
-  const chave = `boletim_${aluno}_${disciplina}`;
-  const boletim = JSON.parse(localStorage.getItem(chave)) || {prova1: "Ainda sem notas", prova2: "Ainda sem notas", trabalho: "Ainda sem notas"};
-  if (nota1 !== "") boletim.prova1 = nota1;
-  if (nota2 !== "") boletim.prova2 = nota2;
-  if (notaT !== "") boletim.trabalho = notaT;
-  localStorage.setItem(chave, JSON.stringify(boletim));
-  alert("Notas salvas com sucesso!");
-  document.getElementById("nota-prova1").value = "";
-  document.getElementById("nota-prova2").value = "";
-  document.getElementById("nota-trabalho").value = "";
-  atualizarMediaProfessor();
-}
-
 //USA BANCO DE DADOS AQUI
-
-function atualizarMediaProfessor() {
-  const aluno = document.getElementById("aluno-boletim").value;
-  const disciplina = document.getElementById("disciplina-boletim").value;
-  const mediaDiv = document.getElementById("media-professor");
-  if (!aluno || !disciplina) {
-    mediaDiv.innerHTML = "<strong>Média:</strong> Disponível após preencher todas as notas";
-    return;
-  }
-  const chave = `boletim_${aluno}_${disciplina}`;
-  const boletim = JSON.parse(localStorage.getItem(chave));
-  if (!boletim) {
-    mediaDiv.innerHTML = "<strong>Média:</strong> Disponível após preencher todas as notas";
-    return;
-  }
-  const notas = [boletim.prova1, boletim.prova2, boletim.trabalho].map(n => parseFloat(n));
-  if (notas.some(isNaN)) {
-    mediaDiv.innerHTML = "<strong>Média:</strong> Disponível após preencher todas as notas";
-    return;
-  }
-  const media = ((notas[0] + notas[1] + notas[2]) / 3).toFixed(2);
-  mediaDiv.innerHTML = `<strong>Média:</strong> ${media}`;
-}
-
-
-
-function carregarNotasSalvasProfessor() {
-  const aluno = document.getElementById("aluno-boletim").value;
-  const disciplina = document.getElementById("disciplina-boletim").value;
-  const nota1 = document.getElementById("nota-prova1");
-  const nota2 = document.getElementById("nota-prova2");
-  const notaT = document.getElementById("nota-trabalho");
-  nota1.value = "";
-  nota2.value = "";
-  notaT.value = "";
-  if (!aluno || !disciplina) return;
-  const chave = `boletim_${aluno}_${disciplina}`;
-  const boletim = JSON.parse(localStorage.getItem(chave));
-  if (!boletim) return;
-  if (!isNaN(parseFloat(boletim.prova1))) nota1.value = boletim.prova1;
-  if (!isNaN(parseFloat(boletim.prova2))) nota2.value = boletim.prova2;
-  if (!isNaN(parseFloat(boletim.trabalho))) notaT.value = boletim.trabalho;
-  atualizarMediaProfessor();
-}
 
 function abrirGerenciamentoUsuarios() {
   const container = document.getElementById("lista-usuarios");

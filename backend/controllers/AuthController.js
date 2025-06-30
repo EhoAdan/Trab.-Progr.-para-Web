@@ -80,7 +80,14 @@ const authController = {
     try {
       const usuario =
         (await Aluno.findOne({ where: { email } })) ||
-        (await Professor.findOne({ where: { email } }));
+        (await Professor.findOne({ 
+          where: { email },
+          include: {
+          model: Disciplina,
+          as: 'disciplinas',
+          attributes: ['id', 'nome']
+          } 
+        }));
 
       if (!usuario) {
         return res.status(404).json({ error: 'Usuário não encontrado' });

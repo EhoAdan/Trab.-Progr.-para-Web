@@ -8,7 +8,8 @@ export default (sequelize, DataTypes) => {
 
   Professor.associate = (models) => {
     Professor.hasMany(models.Disciplina, {
-      foreignKey: 'professorId'
+      foreignKey: 'professorId',
+      as: 'disciplinas'
     });
   };
 

@@ -62,20 +62,28 @@
 
   <div id="professor-funcionalidade-boletim" class="funcionalidade">
   <h2>Lançar Notas</h2>
-  <label for="serie-boletim">Série (Turma):</label>
-  <select id="serie-boletim" onchange="preencherAlunosDaSerie()"></select>
-  <label for="aluno-boletim">Aluno:</label>
-  <select id="aluno-boletim" onchange="carregarNotasSalvasProfessor()"></select>
-  <label for="disciplina-boletim">Disciplina:</label>
-  <select id="disciplina-boletim" onchange="carregarNotasSalvasProfessor()"></select>
-  <label for="nota-prova1">Nota - Prova 1:</label>
-  <input type="number" id="nota-prova1" min="0" max="10" step="0.1" />
-  <label for="nota-prova2">Nota - Prova 2:</label>
-  <input type="number" id="nota-prova2" min="0" max="10" step="0.1" />
-  <label for="nota-trabalho">Nota - Trabalho:</label>
-  <input type="number" id="nota-trabalho" min="0" max="10" step="0.1" />
-  <p id="media-professor"><strong>Média:</strong> Disponível após preencher todas as notas</p>
-  <button onclick="salvarNotasMultipla()">Salvar Nota</button>
+
+  <label for="turma-select">Série (Turma):</label>
+  <select id="turma-select">
+    <option value="">-- Selecione uma Turma --</option>
+  </select>
+
+  <label for="aluno-select">Aluno:</label>
+  <select id="aluno-select">
+    <option value="">-- Selecione um Aluno --</option>
+  </select>
+
+  <label for="disciplina-select">Disciplina:</label>
+  <select id="disciplina-select">
+    <option value="">-- Selecione uma Disciplina --</option>
+  </select>
+
+
+  <label for="nota-input">Nota:</label>
+  <input type="number" id="nota-input" min="0" max="10" step="0.1" />
+
+  <button onclick="lancarNota()">Lançar Nota</button>
+  <div id="mensagem-lancar-nota" style="margin-top: 10px; font-weight: bold;"></div>
     <button onclick="fecharFuncionalidade('professor')">Voltar</button>
   </div>
 
