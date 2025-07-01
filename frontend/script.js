@@ -1,3 +1,4 @@
+// Essa seção faz aparecer a seção de login e cria botões para algumas funcionalidades
 document.addEventListener("DOMContentLoaded", () => {
     esconderTodasAreas(); // Por estarmos lidando com apenas uma página html, é necessário que escondamos algumas de suas funcionalidades ou seções. Isso se repetirá algumas vezes durante o código
     document.getElementById("login-section").style.display = "block";
@@ -123,6 +124,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   }
 
+// Para o logout, removemos os tokens do usuário, escondemos e fechamos várias funcionalidades do html
   function logout() {
 
     localStorage.removeItem("token");
@@ -150,7 +152,8 @@ document.addEventListener("DOMContentLoaded", () => {
     const senhaInput = document.getElementById("senha");
     senhaInput.type = senhaInput.type === "password" ? "text" : "password";
   }
-  
+
+// Várias funções, como as "Mostrar" abaixo, fazem exatamente isso, manipulam o html de forma a mostrar uma ou outra funcionalidade, elas aparecerão algumas vezes aqui nesse código
   function mostrarCriarUsuario() {
     document.getElementById("login-section").style.display = "none";
     document.getElementById("criar-usuario-section").style.display = "block";
@@ -168,7 +171,8 @@ document.addEventListener("DOMContentLoaded", () => {
     document.getElementById("redefinir-senha-section").style.display = "none";
     document.getElementById("login-section").style.display = "block";
   }
-  
+
+// Função de criar usuário, onde, caso aluno, tem ele inserido em uma turma (selecionada no momento da criação) e atribuído as matérias no boletim, essas conectadas aos professores
   async function criarUsuario() {
     const nome = document.getElementById("novo-usuario").value.trim().toLowerCase();
     const email = document.getElementById("novo-email").value.trim().toLowerCase();
@@ -210,7 +214,8 @@ document.addEventListener("DOMContentLoaded", () => {
     alert("Erro de rede ou servidor fora do ar.");
   }
 }
-  
+
+// Redefinição de senha (a qual não está operante)
   function redefinirSenha() {
     const nome = document.getElementById("usuario-redefinir").value.trim().toLowerCase();
     const novaSenha = document.getElementById("nova-senha-redefinir").value;
@@ -226,6 +231,9 @@ document.addEventListener("DOMContentLoaded", () => {
     voltarLogin();
   }
 
+// Todas aa seções abaixo apontadas como "USA BANCO DE DADOS" podem ser ignoradas.
+// Foram criadas para testes realizados apenas com o Front e que deveriam ter sido repassados ao banco de dados posteriormente.
+// Desnecessário comentar que isso não aconteceu até o final do prazo de entrega. (Não excluímos, pois percebemos que o trabalho possui alto acoplamento)
 //USA BANCO DE DADOS AQUI
   
   const livrosDidaticos = {
@@ -345,7 +353,7 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
 
-
+// Abre a seção (boletim, suporte, criar usuário, etc) requisitada, de acordo com o nome
   function abrirFuncionalidade(area, nome) {
     fecharFuncionalidade(area);
     const menu = document.getElementById(`${area}-menu`);
@@ -357,7 +365,7 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
 
-
+// Fecha a seção aberta acima
   function fecharFuncionalidade(area) {
     const funcionalidades = document.querySelectorAll(`#area-${area} .funcionalidade`);
     funcionalidades.forEach(div => div.style.display = "none");
@@ -399,8 +407,11 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
+//USA BANCO DE DADOS AQUI
   let disciplinasDisponiveis = [];
 
+
+// Carrega as disciplinas para uso futuro no boletim (e deveria ser para  professor, material didático etc)
   async function carregarDisciplinas() {
     try {
       const res = await fetch("http://localhost:3000/disciplinas");
@@ -415,7 +426,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   }
 
-
+// Carrega as turmas para uso futuro no boletim (e deveria ser para professor, material didático etc)
   async function carregarTurmas() {
     try {
       const res = await fetch("http://localhost:3000/turmas");
@@ -437,7 +448,7 @@ document.addEventListener("DOMContentLoaded", () => {
     carregarDisciplinas();
   };
 
-
+// Campos extras aqui se refere ao "Criar usuário", por isso carregamos informações como a Turma etc. 
   function atualizarCamposExtras() {
     const tipo = document.getElementById("tipo-usuario").value;
     const container = document.getElementById("campos-extras");
@@ -459,6 +470,7 @@ document.addEventListener("DOMContentLoaded", () => {
       container.appendChild(select);
     }
 
+// Caso o usuário criado seja o Professor...
     if (tipo === "professor") {
       container.appendChild(document.createTextNode("Disciplinas que leciona:"));
 
@@ -477,8 +489,8 @@ document.addEventListener("DOMContentLoaded", () => {
       });
     }
   }
-//
 
+// Carrega turmas para o professor na hora de lançar o boletim
 async function carregarTurmasParaProfessor() {
   const turmaSelect = document.getElementById("turma-select");
   turmaSelect.innerHTML = "<option value=''>-- Selecione uma Turma --</option>";
@@ -503,6 +515,7 @@ async function carregarTurmasParaProfessor() {
   }
 }
 
+// Isso aqui permite que o professor selecione o aluno no momento ed dar nota
 document.getElementById("turma-select").addEventListener("change", async function () {
   const turmaId = this.value;
   const alunoSelect = document.getElementById("aluno-select");
@@ -530,6 +543,7 @@ document.getElementById("turma-select").addEventListener("change", async functio
   }
 });
 
+// Essa função é invocada para determinar qual matéria o Professor pode dar nota
 function preencherDisciplinasProfessor(professor) {
   const select = document.getElementById("disciplina-select");
   select.innerHTML = "<option value=''>-- Selecione uma Disciplina --</option>";
@@ -542,6 +556,8 @@ function preencherDisciplinasProfessor(professor) {
   });
 }
 
+
+// Função de lançar notas no boletim
 async function lancarNota() {
   const alunoId = document.getElementById("aluno-select").value;
   const disciplinaId = document.getElementById("disciplina-select").value;
@@ -832,9 +848,6 @@ function mostrarHistoricoUsuario(tipoUsuario) {
   container.appendChild(blocoReq);
   container.appendChild(blocoRec);
 }
-
-
-//USA BANCO DE DADOS AQUI
 
 //USA BANCO DE DADOS AQUI
 
