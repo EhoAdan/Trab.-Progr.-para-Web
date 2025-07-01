@@ -1,5 +1,5 @@
 document.addEventListener("DOMContentLoaded", () => {
-    esconderTodasAreas();
+    esconderTodasAreas(); // Por estarmos lidando com apenas uma página html, é necessário que escondamos algumas de suas funcionalidades ou seções. Isso se repetirá algumas vezes durante o código
     document.getElementById("login-section").style.display = "block";
     const btnVerSenha = document.getElementById("btn-ver-senha");
     if (btnVerSenha) {btnVerSenha.addEventListener("click", alternarSenha)}
@@ -21,10 +21,14 @@ document.addEventListener("DOMContentLoaded", () => {
         }
       });
     }
+
+    // Esta seção somente altera o tema claro/escuro do site
     const temaSalvo = localStorage.getItem("tema") || "claro";
     document.body.classList.toggle("dark-mode", temaSalvo === "escuro");
     const seletor = document.getElementById("seletor-tema");
     if (seletor) {seletor.value = temaSalvo;}
+
+    // Pega os dados de Login e Senha do HTML e puxa a função de "fazerLogin"
     const loginInput = document.getElementById("login");
     const senhaInput = document.getElementById("senha");
     [loginInput, senhaInput].forEach(input => {
@@ -38,12 +42,15 @@ document.addEventListener("DOMContentLoaded", () => {
 
   });
 
+
+// Esconde as funcionalidades da página, uma vez que estamos lidando com um html estático
   function fecharTodasFuncionalidades() {
     const todas = document.querySelectorAll(".funcionalidade");
     todas.forEach(div => div.style.display = "none");
     const todosMenus = document.querySelectorAll("#aluno-menu, #professor-menu, #funcionario-menu, #secretaria-menu, #suporte-menu");
     todosMenus.forEach(menu => menu.style.display = "block");}
 
+// Função "fazerLogin" de anteriormente
   async function fazerLogin() {
     const email = document.getElementById('login').value.trim().toLowerCase();
     const senha = document.getElementById('senha').value;
@@ -64,15 +71,17 @@ document.addEventListener("DOMContentLoaded", () => {
         return;
       }
 
+    // Adiciona o token de autenticação para o usuário
       const {token, usuario} = data;
       localStorage.setItem("token", token);
-      
       localStorage.setItem("usuario", JSON.stringify(usuario))
 
       document.getElementById("login-section").style.display = "none";
       document.getElementById("btn-logout").style.display = "block";
 
+    // Outro esconder áreas
       esconderTodasAreas();
+    
       const tipo = usuario.atribuicao;
 
       if (tipo === "aluno") {
