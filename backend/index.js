@@ -39,8 +39,8 @@ app.get('/', (req, res) => {
 });
 
 app.use('/auth', authRoutes);
-app.use('/alunos', alunoRoutes);
-app.use('/professores', professorRoutes);
+app.use('/aluno', alunoRoutes);
+app.use('/professor', professorRoutes);
 app.use('/disciplinas', disciplinaRoutes);
 app.use('/turmas', turmaRoutes);
 

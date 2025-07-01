@@ -1,4 +1,5 @@
 import db from '../database/index.js';
+import bcrypt from 'bcrypt';
 const { Aluno, Disciplina } = db;
 
 // Método para encontrar todos os alunos da database e retornando um json incluindo o boletim de cada aluno.
@@ -40,7 +41,9 @@ const alunoController = {
     try {
       const aluno = await Aluno.findByPk(req.params.id);
       if (!aluno) return res.status(404).json({ error: 'Aluno não encontrado' });
-
+      if (req.body.senha) {
+            req.body.senha = await bcrypt.hash(req.body.senha, 10);
+      }
       await aluno.update(req.body);
       res.json(aluno);
     } catch (err) {

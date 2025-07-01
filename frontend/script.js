@@ -166,7 +166,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     try {
-      const res = await fetch(`http://localhost:3000/professores/${usuario.id}`, {
+      const res = await fetch(`http://localhost:3000/${usuario.atribuicao}/${usuario.id}`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
@@ -630,7 +630,7 @@ async function lancarNota() {
   }
 
   try {
-    const res = await fetch(`http://localhost:3000/alunos/${alunoId}/disciplinas/${disciplinaId}`, {
+    const res = await fetch(`http://localhost:3000/aluno/${alunoId}/disciplinas/${disciplinaId}`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -918,7 +918,7 @@ function mostrarHistoricoUsuario(tipoUsuario) {
   const container = document.getElementById("aluno-funcionalidade-boletim");
   container.innerHTML = "<h2>Boletim</h2>";
   try {
-      const res = await fetch(`http://localhost:3000/alunos/${id}/boletim`, {
+      const res = await fetch(`http://localhost:3000/aluno/${id}/boletim`, {
         method: "GET",
         headers: {
           "Content-Type": "application/json" ,
