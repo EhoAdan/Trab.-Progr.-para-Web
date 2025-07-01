@@ -46,6 +46,9 @@
 
   <div id="aluno-menu">
     <button onclick="abrirFuncionalidade('aluno', 'boletim')">Boletim</button>
+    <button onclick="abrirFuncionalidade('aluno', 'frequencia')">Frequência escolar</button>
+    <button onclick="abrirFuncionalidade('aluno', 'material')">Material didático</button>
+    <button onclick="abrirFuncionalidade('aluno', 'suporte')">Suporte</button>
   </div>
 
   <div id="aluno-funcionalidade-boletim" class="funcionalidade">
@@ -54,11 +57,60 @@
     <button onclick="fecharFuncionalidade('aluno')">Voltar</button>
   </div>
 
+  <div id="aluno-funcionalidade-frequencia" class="funcionalidade">
+    <h2>Frequência Escolar</h2>
+    <p>Conteúdo da frequência.</p>
+    <button onclick="fecharFuncionalidade('aluno')">Voltar</button>
+  </div>
+
+  <div id="aluno-funcionalidade-material" class="funcionalidade">
+    <h2>Material Didático</h2>
+    <div id="selecionar-disciplina">
+      <label for="disciplina">Selecione a disciplina:</label>
+      <select id="disciplina"></select>
+    </div>
+    <div id="livros-container"></div>
+    <button onclick="fecharFuncionalidade('aluno')">Voltar</button>
+  </div>
+
+  <div id="aluno-funcionalidade-suporte" class="funcionalidade">
+  <h2>Suporte</h2>
+  <label for="tipo-mensagem-aluno">Tipo de solicitação:</label>
+  <select id="tipo-mensagem-aluno">
+    <option value="">-- Selecione --</option>
+    <option value="ajuda">Ajuda</option>
+    <option value="reclamacao">Reclamação</option>
+  </select>
+  <textarea id="mensagem-aluno" placeholder="Digite sua mensagem..." rows="5" style="width: 100%; margin-top: 10px;"></textarea>
+  <button onclick="enviarMensagemSuporte('aluno')">Enviar</button>
+  <div id="resposta-aluno" style="margin-top: 15px;"></div>
+  <button onclick="fecharFuncionalidade('aluno')">Voltar</button>
+</div>
+</section>
+
   <section id="area-professor">
   <h1>Área do Professor</h1>
   <div id="professor-menu">
+    <button onclick="abrirFuncionalidade('professor', 'frequencia');mostrarFrequencia()">Frequência</button>
+    <button onclick="abrirFuncionalidade('professor', 'historico');mostrarHistoricoFrequencia()">Ver Histórico de Frequência</button>
     <button onclick="abrirFuncionalidade('professor', 'boletim')">Boletim</button>
+    <button onclick="abrirFuncionalidade('professor', 'material');mostrarMaterialProfessor()">Material didático</button>
+    <button onclick="abrirFuncionalidade('professor', 'suporte')">Suporte</button>
   </div>
+
+  <div id="professor-funcionalidade-frequencia" class="funcionalidade">
+    <h2>Registrar Frequência</h2>
+    <label for="turma-frequencia">Selecione a série:</label>
+    <select id="turma-frequencia" onchange="carregarAlunosTurma()"></select>
+    <div id="alunos-frequencia"></div>
+    <button onclick="salvarFrequencia()" class="botao-salvar">Salvar Frequência</button>
+    <button onclick="fecharFuncionalidade('professor')">Voltar</button>
+  </div>
+  <div id="professor-funcionalidade-historico" class="funcionalidade">
+  <h2>Histórico de Frequência</h2>
+  <div id="historico-frequencia-container"></div>
+  <button onclick="fecharFuncionalidade('professor')">Voltar</button>
+</div>
 
   <div id="professor-funcionalidade-boletim" class="funcionalidade">
   <h2>Lançar Notas</h2>
@@ -87,6 +139,106 @@
     <button onclick="fecharFuncionalidade('professor')">Voltar</button>
   </div>
 
+  <div id="professor-funcionalidade-material" class="funcionalidade">
+  <h2>Material Didático</h2>
+  <div id="selecionar-disciplina-prof">
+    <label for="disciplina-prof">Selecione a disciplina:</label>
+    <select id="disciplina-prof"></select>
+  </div>
+  <div id="livros-container-prof"></div>
+  <button onclick="fecharFuncionalidade('professor')">Voltar</button>
+</div>
+
+  <div id="professor-funcionalidade-suporte" class="funcionalidade">
+  <h2>Suporte</h2>
+  <label for="tipo-mensagem-professor">Tipo de solicitação:</label>
+  <select id="tipo-mensagem-professor">
+    <option value="">-- Selecione --</option>
+    <option value="ajuda">Ajuda</option>
+    <option value="reclamacao">Reclamação</option>
+  </select>
+  <textarea id="mensagem-professor" placeholder="Digite sua mensagem..." rows="5" style="width: 100%; margin-top: 10px;"></textarea>
+  <button onclick="enviarMensagemSuporte('professor')">Enviar</button>
+  <div id="resposta-professor" style="margin-top: 15px;"></div>
+  <button onclick="fecharFuncionalidade('professor')">Voltar</button>
+</div>
+</section>
+
+  <section id="area-funcionario">
+  <h1>Área do Funcionário</h1>
+
+  <div id="funcionario-menu">
+    <button onclick="abrirFuncionalidade('funcionario', 'suporte')">Suporte</button>
+  </div>
+
+  <div id="funcionario-funcionalidade-suporte" class="funcionalidade">
+  <h2>Suporte</h2>
+  <label for="tipo-mensagem-funcionario">Tipo de solicitação:</label>
+  <select id="tipo-mensagem-funcionario">
+    <option value="">-- Selecione --</option>
+    <option value="ajuda">Ajuda</option>
+    <option value="reclamacao">Reclamação</option>
+  </select>
+  <textarea id="mensagem-funcionario" placeholder="Digite sua mensagem..." rows="5" style="width: 100%; margin-top: 10px;"></textarea>
+  <button onclick="enviarMensagemSuporte('funcionario')">Enviar</button>
+  <div id="resposta-funcionario" style="margin-top: 15px;"></div>
+  <button onclick="fecharFuncionalidade('funcionario')">Voltar</button>
+</div>
+</section>
+
+  <section id="area-secretaria">
+  <h1>Área da Secretaria</h1>
+  <div id="secretaria-menu">
+  <button onclick="abrirFuncionalidade('secretaria', 'usuarios')">Usuários</button>
+  <button onclick="abrirFuncionalidade('secretaria', 'reclamacoes-recebidas');mostrarReclamacoesSecretaria()">Reclamações Recebidas</button>
+  <button onclick="abrirFuncionalidade('secretaria', 'suporte')">Suporte</button>
+</div>
+
+<div id="secretaria-funcionalidade-reclamacoes-recebidas" class="funcionalidade">
+  <h2>Reclamações Recebidas</h2>
+  <div id="painel-reclamacoes-secretaria"></div>
+  <button onclick="fecharFuncionalidade('secretaria')">Voltar</button>
+</div>
+
+<div id="secretaria-funcionalidade-suporte" class="funcionalidade">
+  <h2>Enviar Pedido de Ajuda ao Suporte</h2>
+  <textarea id="mensagem-ajuda-secretaria" rows="5" placeholder="Digite sua solicitação..." style="width: 100%;"></textarea>
+  <button onclick="enviarAjudaSecretaria()">Enviar</button>
+  <div id="confirmacao-ajuda-secretaria" style="margin-top: 10px;"></div>
+  <button onclick="fecharFuncionalidade('secretaria')">Voltar</button>
+</div>
+
+  <div id="secretaria-funcionalidade-usuarios" class="funcionalidade">
+    <h2>Usuários</h2>
+    <div id="lista-usuarios"></div>
+    <p>Gerenciamento de usuários.</p>
+    <button onclick="fecharFuncionalidade('secretaria')">Voltar</button>
+  </div>
+</section>
+
+<section id="area-suporte">
+  <h1>Área de Suporte</h1>
+
+<div id="suporte-menu">
+  <button onclick="abrirFuncionalidade('suporte', 'requisicoes');mostrarRequisicoesSuporte()">Requisições</button>
+  <button onclick="abrirFuncionalidade('suporte', 'reclamacoes')">Reclamações</button>
+</div>
+
+<div id="suporte-funcionalidade-requisicoes" class="funcionalidade">
+  <h2>Requisições de Ajuda</h2>
+  <div id="painel-ajuda-suporte"></div>
+  <button onclick="fecharFuncionalidade('suporte')">Voltar</button>
+</div>
+
+<div id="suporte-funcionalidade-reclamacoes" class="funcionalidade">
+  <h2>Enviar Reclamação à Secretaria</h2>
+  <textarea id="mensagem-reclamacao-suporte" rows="5" placeholder="Digite sua reclamação..." style="width: 100%;"></textarea>
+  <button onclick="enviarReclamacaoSuporte()">Enviar</button>
+  <div id="confirmacao-reclamacao-suporte" style="margin-top: 10px;"></div>
+  <button onclick="fecharFuncionalidade('suporte')">Voltar</button>
+</div>
+</section>
+
   <section id="criar-usuario-section">
     <h2>Criar novo usuário</h2>
     <input type="text" id="novo-usuario" placeholder="Novo login" />
@@ -96,7 +248,8 @@
     <option value="">Selecione o tipo</option>
     <option value="aluno">Aluno</option>
     <option value="professor">Professor</option>
-
+    <option value="funcionario">Funcionário</option>
+    <option value="secretaria">Secretaria</option>
     </select>
     <div id="campos-extras"></div>
     <button onclick="criarUsuario()">Criar</button>
