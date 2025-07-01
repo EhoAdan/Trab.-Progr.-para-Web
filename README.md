@@ -14,3 +14,9 @@ Naturalmente, alunos e professores também terão acesso a turmas virtuais, com 
 Essa era a idéia original:
 
 Entre vários percalços da realização do trabalho, o trabalho final só compreende criação de alunos, professores (dois tipo de usuários diferentes) onde o professor pode dar notas para um aluno, o qual somente aquele aluno, daquela turma selecionada, pode visualizar suas notas.
+
+Link do GitHub:
+https://github.com/EhoAdan/Trab.-Progr.-para-Web
+
+Link do Site "subido" no vms da UFSC:
+http://escola.guilherme.steiner.vms.ufsc.br:8000
