@@ -10,6 +10,7 @@ router.post('/', alunoController.criar);
 router.put('/:id', alunoController.atualizar);
 router.delete('/:id', alunoController.remover);
 router.post('/:alunoId/disciplinas/:disciplinaId', alunoController.adicionarDisciplinaComNota);
+//chama o authMiddleware além de listarBoletim para a conferência de autenticação
 router.get('/:id/boletim', authMiddleware, alunoController.listarBoletim);
 
 

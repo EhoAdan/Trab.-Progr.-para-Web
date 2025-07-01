@@ -6,6 +6,7 @@ export default (sequelize, DataTypes) => {
     atribuicao: { type: DataTypes.STRING, defaultValue: 'aluno' }
   });
 
+  //associa turma e disciplinas a aluno
   Aluno.associate = (models) => {
     Aluno.belongsTo(models.Turma, {
       foreignKey: 'turmaId',

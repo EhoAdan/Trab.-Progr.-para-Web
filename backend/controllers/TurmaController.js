@@ -11,6 +11,7 @@ const turmaController = {
     }
   },
 
+  //lista todas as turmas incluindo os alunos atribuidos a ela 
   async listar(req, res) {
     try {
       const turmas = await Turma.findAll({ include: 'alunos' });
@@ -20,6 +21,7 @@ const turmaController = {
     }
   },
 
+  //lista todos os alunos presente na turma especificada
   async listarAlunos(req, res) {
     try {
       const turma = await Turma.findByPk(req.params.id, {

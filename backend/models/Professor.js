@@ -6,6 +6,7 @@ export default (sequelize, DataTypes) => {
     atribuicao: { type: DataTypes.STRING, defaultValue: 'professor' }
   });
 
+  //associa disciplina a professor
   Professor.associate = (models) => {
     Professor.hasMany(models.Disciplina, {
       foreignKey: 'professorId',

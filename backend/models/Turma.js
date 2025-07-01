@@ -7,6 +7,7 @@ export default (sequelize, DataTypes) => {
     }
   });
 
+  //associa aluno a turma
   Turma.associate = (models) => {
     Turma.hasMany(models.Aluno, {
       foreignKey: 'turmaId',

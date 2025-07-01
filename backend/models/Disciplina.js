@@ -4,6 +4,7 @@ export default (sequelize, DataTypes) => {
     codigo: { type: DataTypes.STRING, unique: true, allowNull: false }
   });
 
+  //associa aluno e professor a disciplinas
   Disciplina.associate = (models) => {
     Disciplina.belongsTo(models.Professor, {
       foreignKey: 'professorId'

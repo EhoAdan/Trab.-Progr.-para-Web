@@ -1,7 +1,7 @@
 import db from '../database/index.js';
 const { Disciplina, Aluno, Professor } = db;
 
-
+//lista todas as disciplinas
 const disciplinaController = {
   async listarTodos(req, res) {
     try {
@@ -13,7 +13,7 @@ const disciplinaController = {
       res.status(500).json({ error: 'Erro ao listar disciplinas' });
     }
   },
-
+//busca disciplina por id
   async buscarPorId(req, res) {
     try {
       const disc = await Disciplina.findByPk(req.params.id, {
@@ -25,7 +25,7 @@ const disciplinaController = {
       res.status(500).json({ error: 'Erro ao buscar disciplina' });
     }
   },
-
+//cria novas disciplinas
   async criar(req, res) {
     try {
       const nova = await Disciplina.create(req.body);
@@ -34,7 +34,7 @@ const disciplinaController = {
       res.status(400).json({ error: 'Erro ao criar disciplina' });
     }
   },
-
+//atualiza disciplinas
   async atualizar(req, res) {
     try {
       const disc = await Disciplina.findByPk(req.params.id);
@@ -46,7 +46,7 @@ const disciplinaController = {
       res.status(400).json({ error: 'Erro ao atualizar disciplina' });
     }
   },
-
+//remove disciplina
   async remover(req, res) {
     try {
       const disc = await Disciplina.findByPk(req.params.id);

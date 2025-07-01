@@ -1,7 +1,7 @@
 import db from '../database/index.js';
 const { Aluno, Disciplina } = db;
 
-
+// Método para encontrar todos os alunos da database e retornando um json incluindo o boletim de cada aluno.
 const alunoController = {
   async listarTodos(req, res) {
     try {
@@ -12,6 +12,7 @@ const alunoController = {
     }
   },
 
+//Busca um aluno na base de dados pelo ID e retorna um json incluindo o boletim.
   async buscarPorId(req, res) {
     try {
       const aluno = await Aluno.findByPk(req.params.id, {
@@ -24,6 +25,7 @@ const alunoController = {
     }
   },
 
+//Cria um usuário no banco de dados
   async criar(req, res) {
     try {
       const novoAluno = await Aluno.create(req.body);
@@ -33,6 +35,7 @@ const alunoController = {
     }
   },
 
+//Atualiza o aluno pelo id no route
   async atualizar(req, res) {
     try {
       const aluno = await Aluno.findByPk(req.params.id);
@@ -45,6 +48,7 @@ const alunoController = {
     }
   },
 
+//Deleta usuario especificado na route do banco de dados
   async remover(req, res) {
     try {
       const aluno = await Aluno.findByPk(req.params.id);
@@ -56,12 +60,16 @@ const alunoController = {
       res.status(500).json({ error: 'Erro ao deletar aluno' });
     }
   }, 
-  
+
+//Lista todos os boletins relacionados ao idaluno no route e o iddisciplina no route
   async listarBoletim(req, res) {
   
   const { id } = req.params;
+  //userId e atribuicao são o id e a atribuição retornados da tradução do token utilizado na autenticação 
   const { id: userId, atribuicao } = req.user;
 
+  //Proíbe acesso de aluno cujo userId(id do usuario logado que requisitou a função) seja diferente do id do usuario buscado
+  //Não contém uma proibição forte à professores
   if (atribuicao === "aluno" && parseInt(id) !== userId) {
     return res.status(403).json({ error: "Acesso não autorizado ao boletim de outro aluno" });
   }
@@ -90,6 +98,7 @@ const alunoController = {
   }
 } , 
 
+  // Cria uma entrada que relaciona o alunoId e o disciplinaId com base na nota passada no body.
   async adicionarDisciplinaComNota(req, res) {
   const { alunoId, disciplinaId } = req.params;
   const { nota } = req.body;

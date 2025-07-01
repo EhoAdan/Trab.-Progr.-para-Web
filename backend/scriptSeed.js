@@ -1,4 +1,5 @@
 import db from './database/index.js';
+import bcrypt from 'bcrypt';
 
 
 const seed = async () => {
@@ -17,8 +18,8 @@ const seed = async () => {
     }
 
     const [prof1, prof2] = await Promise.all([
-      db.Professor.create({ nome: 'Prof. Ana', email: 'ana@escola.com', senha: '1234' }),
-      db.Professor.create({ nome: 'Prof. Bruno', email: 'bruno@escola.com', senha: '1234' }),
+      db.Professor.create({ nome: 'Prof. Ana', email: 'ana@escola.com', senha: await bcrypt.hash('1234', 10)}),
+      db.Professor.create({ nome: 'Prof. Bruno', email: 'bruno@escola.com', senha: await bcrypt.hash('1234', 10)}),
     ]);
 
     const [disc1, disc2, disc3] = await Promise.all([
@@ -43,8 +44,8 @@ const seed = async () => {
     ]);
 
     const [aluno1, aluno2] = await Promise.all([
-      db.Aluno.create({ nome: 'Carlos', email: 'carlos@aluno.com', senha: '1234', turmaId: 2 }),
-      db.Aluno.create({ nome: 'Débora', email: 'debora@aluno.com', senha: '1234', turmaId: 3}),
+      db.Aluno.create({ nome: 'Carlos', email: 'carlos@aluno.com', senha: await bcrypt.hash('1234', 10), turmaId: 2 }),
+      db.Aluno.create({ nome: 'Débora', email: 'debora@aluno.com', senha: await bcrypt.hash('1234', 10), turmaId: 3}),
     ]);
 
     await Promise.all([
