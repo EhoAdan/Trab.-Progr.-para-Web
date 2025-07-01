@@ -1,4 +1,5 @@
 import db from '../database/index.js';
+import bcrypt from 'bcrypt';
 const { Professor, Disciplina } = db;
 
 
@@ -37,7 +38,9 @@ const professorController = {
     try {
       const prof = await Professor.findByPk(req.params.id);
       if (!prof) return res.status(404).json({ error: 'Professor não encontrado' });
-
+      if (req.body.senha) {
+      req.body.senha = await bcrypt.hash(req.body.senha, 10);
+    }
       await prof.update(req.body);
       res.json(prof);
     } catch (err) {

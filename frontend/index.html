@@ -16,6 +16,11 @@
         </select>
         <button id="btn-logout" onclick="logout()">Sair</button>
       </div>
+      <div>
+          <button id="btn-editar-perfil" onclick="mostrarEditarPerfil()" style="display: none;">Editar Perfil</button>
+
+
+      </div>
 
         <div id="logout-container">
           <button id="btn-logout" onclick="logout()">Sair</button>
@@ -263,6 +268,15 @@
     <button onclick="redefinirSenha()">Redefinir</button>
     <button onclick="voltarLogin()">Voltar</button>
   </section>
+
+<section id="editar-perfil-section" style="display:none">
+  <h2>Editar Perfil</h2>
+  <input type="text" id="editar-nome" placeholder="Novo nome" />
+  <input type="password" id="editar-senha" placeholder="Nova senha" />
+  <button onclick="salvarAlteracoesPerfil()">Salvar Alterações</button>
+  <button onclick="fecharFuncionalidade('professor')">Voltar</button>
+</section>
+
 
   <script src="/script.js"></script>
 </body>
